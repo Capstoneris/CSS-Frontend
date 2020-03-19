@@ -7,7 +7,7 @@ import {environment} from '../../environments/environment';
 })
 export class CustomerService {
 
-  resourcePath: string = 'customer';
+  resourcePath = 'customer';
 
   constructor(private http: HttpClient) {
   }
