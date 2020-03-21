@@ -1,5 +1,10 @@
 name: Build
-on: push
+on:
+  - push
+  - pull_request
+
+env:
+  IMAGE_NAME: css-frontend
 
 jobs:
   test:
@@ -28,13 +33,45 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Lint source code
         run: npm run lint
 
-      - name: Test
+      - name: Run tests
         run: |
           npm run test
 
 #      - name: Test E2E
 #        run: |
 #          npm run e2e
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t image .
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo "${{ github.ref }}"
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          #docker tag image $IMAGE_ID:$VERSION
+          #docker push $IMAGE_ID:$VERSION
