@@ -1,6 +1,6 @@
-# Client
+# Capturis Session Share - Client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
+![Build](https://github.com/Capstoneris/CSS-Frontend/workflows/Build/badge.svg)
 
 ## Development server
 
