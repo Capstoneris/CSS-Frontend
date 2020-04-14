@@ -8,5 +8,8 @@
 
 <!-- main app container -->
 <div class="container">
-  <router-outlet></router-outlet>
+  <div *ngIf="loading; else loaded" class="spinner-border spinner-border-sm"></div>
+  <ng-template #loaded>
+    <router-outlet></router-outlet>
+  </ng-template>
 </div>
