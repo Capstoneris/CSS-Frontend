@@ -12,7 +12,7 @@ export class AuthenticationService {
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+        this.currentUserSubject = new BehaviorSubject<User>(null);
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
@@ -20,20 +20,25 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
+    public get authToken():string {
+      // TODO
+      return "";
+    }
+
     login(username: string, password: string) {
-        return this.http.post<any>(`${environment.apiUrl}/users/authenticate`, { username, password })
-            .pipe(map(user => {
-                // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-                user.authdata = window.btoa(username + ':' + password);
-                localStorage.setItem('currentUser', JSON.stringify(user));
+        return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
+            .pipe(map((user : User) => {
+                // login successful
                 this.currentUserSubject.next(user);
                 return user;
             }));
     }
 
     logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
+      return this.http.post<any>(`${environment.apiUrl}/auth/logout`, {})
+        .subscribe(() => {
+          // logout successful
+          this.currentUserSubject.next(null);
+        });
     }
 }

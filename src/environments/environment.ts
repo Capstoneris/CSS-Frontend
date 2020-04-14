@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseRestURL: 'http://localhost:8080/rest',
-  apiUrl: 'http://localhost:4000'
+  apiUrl: 'http://localhost:8081/api',
+  websocketUrl: 'http://localhost:8082'
 };
 
 /*
