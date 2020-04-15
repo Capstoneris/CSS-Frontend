@@ -1,7 +1,7 @@
 ﻿import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
 import {User} from '@app/_models';
@@ -27,6 +27,10 @@ export class AuthenticationService {
 
   restoreLogin() {
     return this.http.get(`${environment.apiUrl}/auth`)
+      .pipe(catchError(err => {
+        this.currentUserSubject.next(null);
+        return throwError(err);
+      }))
       .pipe(map((user: User) => {
         this.currentUserSubject.next(user);
         return user;
