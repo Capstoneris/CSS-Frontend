@@ -1,2 +1,15 @@
-<button (click)="getCustomerFromWebService()">Get customer from server</button>
-<span>Response from the server: {{customer}}</span>
+﻿<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
+  <div class="navbar-nav">
+    <a class="nav-item nav-link" routerLink="/">Home</a>
+    <a class="nav-item nav-link" (click)="logout()">Logout</a>
+  </div>
+</nav>
+
+<!-- main app container -->
+<div class="container">
+  <div *ngIf="loading; else loaded" class="spinner-border spinner-border-sm"></div>
+  <ng-template #loaded>
+    <router-outlet></router-outlet>
+  </ng-template>
+</div>

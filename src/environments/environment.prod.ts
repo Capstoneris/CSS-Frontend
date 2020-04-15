@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseRestURL: ''
+  apiUrl: 'TODO',
+  websocketUrl: 'TODO'
 };

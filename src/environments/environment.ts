@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseRestURL: 'http://localhost:8080/rest'
+  apiUrl: 'http://localtest.me:8081/api', // localtest.me to make cookies work
+  websocketUrl: 'http://localtest.me:8082'
 };
 
 /*

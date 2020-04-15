@@ -67,7 +67,10 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "client:build"
+            "browserTarget": "client:build",
+            "allowedHosts": [
+              "localtest.me"
+            ]
           },
           "configurations": {
             "production": {
@@ -124,6 +127,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "client"
 }

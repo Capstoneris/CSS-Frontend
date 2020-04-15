@@ -1,23 +1,29 @@
-import {Component} from '@angular/core';
-import {CustomerService} from './services/customer.service';
+﻿import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
-})
-export class AppComponent {
-  customer: string = null;
+import {AuthenticationService} from './_services';
+import {User} from './_models';
 
-  constructor(private customerService: CustomerService) {
+@Component({templateUrl: 'app.component.html'})
+export class AppComponent implements OnInit {
+  currentUser: User;
+  loading = true;
+
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
 
-  getCustomerFromWebService() {
-    this.customerService.getCustomer()
-      .subscribe(response => {
-        this.customer = response;
-      }, err => {
-        console.error(err);
-      });
+  ngOnInit() {
+    this.authenticationService.restoreLogin().subscribe(() => {
+      this.loading = false;
+    });
+  }
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
   }
 }
