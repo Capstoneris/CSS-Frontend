@@ -9,6 +9,7 @@ import {appRoutingModule} from './app.routing';
 import {ErrorInterceptor} from './_helpers';
 import {HomeComponent} from './home';
 import {LoginComponent} from './login';
+import {WebsocketService} from "@app/websocket.service";
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import {LoginComponent} from './login';
     LoginComponent
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    WebsocketService
   ],
   bootstrap: [AppComponent]
 })
