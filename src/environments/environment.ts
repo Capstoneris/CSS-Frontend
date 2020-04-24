@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:8081/api',
   websocketUrl: 'http://localhost:8082',
-  //Basically same as websocketUrl, for testing purposes...
+  // Basically same as websocketUrl, for testing purposes...
   SOCKET_ENDPOINT: 'http://localhost:3000'
 
 };
