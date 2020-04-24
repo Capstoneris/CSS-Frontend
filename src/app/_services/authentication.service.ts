@@ -9,29 +9,32 @@ import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
+  private readonly LOCAL_STORAGE_JWT = 'jwt';
+
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
+
+  public authToken: string;
 
   constructor(private http: HttpClient, private cookieService: CookieService) {
     this.currentUserSubject = new BehaviorSubject<User>(null);
     this.currentUser = this.currentUserSubject.asObservable();
+
+    this.authToken = localStorage.getItem(this.LOCAL_STORAGE_JWT);
   }
 
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
   }
 
-  public get authToken(): string {
-    return this.cookieService.get('css-jwt');
-  }
-
   restoreLogin() {
-    return this.http.get(`${environment.apiUrl}/auth`)
+    return this.http.get<any>(`${environment.apiUrl}/auth`)
       .pipe(catchError(err => {
         this.currentUserSubject.next(null);
         return throwError(err);
       }))
-      .pipe(map((user: User) => {
+      .pipe(map(result => {
+        const user: User = result.user;
         this.currentUserSubject.next(user);
         return user;
       }));
@@ -39,8 +42,12 @@ export class AuthenticationService {
 
   login(username: string, password: string) {
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, {username, password})
-      .pipe(map((user: User) => {
+      .pipe(map(result => {
         // login successful
+        const user: User = result.user;
+        const token: string = result.token;
+        localStorage.setItem(this.LOCAL_STORAGE_JWT, token);
+        this.authToken = token;
         this.currentUserSubject.next(user);
         return user;
       }));
@@ -51,6 +58,8 @@ export class AuthenticationService {
       .subscribe(() => {
         // logout successful
         this.currentUserSubject.next(null);
+        localStorage.removeItem(this.LOCAL_STORAGE_JWT);
+        this.authToken = null;
       });
   }
 }

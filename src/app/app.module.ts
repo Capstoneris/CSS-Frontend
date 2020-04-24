@@ -10,6 +10,7 @@ import {ErrorInterceptor} from './_helpers';
 import {HomeComponent} from './home';
 import {LoginComponent} from './login';
 import {WebsocketService} from '@app/_services/websocket.service';
+import {AuthenticationInterceptor} from "@app/_helpers/authentication.interceptor";
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {WebsocketService} from '@app/_services/websocket.service';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
     WebsocketService
   ],
   bootstrap: [AppComponent]
