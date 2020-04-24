@@ -10,7 +10,7 @@ import {ErrorInterceptor} from './_helpers';
 import {HomeComponent} from './home';
 import {LoginComponent} from './login';
 import {WebsocketService} from '@app/_services/websocket.service';
-import {AuthenticationInterceptor} from "@app/_helpers/authentication.interceptor";
+import {AuthenticationInterceptor} from '@app/_helpers/authentication.interceptor';
 
 @NgModule({
   imports: [
