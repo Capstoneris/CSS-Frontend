@@ -5,7 +5,6 @@ import {catchError, map} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
 import {User} from '@app/_models';
-import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -16,7 +15,7 @@ export class AuthenticationService {
 
   public authToken: string;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {
+  constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(null);
     this.currentUser = this.currentUserSubject.asObservable();
 
