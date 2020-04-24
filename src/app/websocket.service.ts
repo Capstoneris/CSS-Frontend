@@ -14,7 +14,6 @@ export class WebsocketService {
   socket;
 
   constructor() {
-    this.socket = io(environment.SOCKET_ENDPOINT);
   }
 
   setupSocketConnection() {
