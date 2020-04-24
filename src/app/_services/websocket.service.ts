@@ -1,23 +1,16 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {Observable} from 'rxjs';
 import {environment} from '@environments/environment';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
-
-  // socket : any;
-  // private socket;
-  socket;
-
-  constructor() {
-  }
+  private socket;
 
   setupSocketConnection() {
-    this.socket = io(environment.SOCKET_ENDPOINT);
+    this.socket = io(environment.websocketUrl);
     this.socket.emit('my message', 'WebsocketService.setupSocketConnection(): TEST ########')
 
     this.socket.on('my broadcast', (data: string) => {
@@ -25,7 +18,7 @@ export class WebsocketService {
     });
   }
 
-  listen(eventName: string){
+  listen(eventName: string) {
     return new Observable((subscriber) => {
       this.socket.on(eventName, (data) => {
         subscriber.next(data);
@@ -33,7 +26,7 @@ export class WebsocketService {
     });
   }
 
-  emit(eventName: string, data: any){
+  emit(eventName: string, data: any) {
     this.socket.emit(eventName, data);
   }
 }

@@ -3,13 +3,12 @@ import {Router} from '@angular/router';
 
 import {AuthenticationService} from './_services';
 import {User} from './_models';
-import {WebsocketService} from '@app/websocket.service';
+import {WebsocketService} from '@app/_services/websocket.service';
 
 @Component({selector: 'app-root', templateUrl: 'app.component.html'})
 export class AppComponent implements OnInit {
   currentUser: User;
   loading = true;
-  title = 'test socketio-angular';
 
   constructor(
     private router: Router,

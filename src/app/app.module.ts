@@ -9,7 +9,7 @@ import {appRoutingModule} from './app.routing';
 import {ErrorInterceptor} from './_helpers';
 import {HomeComponent} from './home';
 import {LoginComponent} from './login';
-import {WebsocketService} from '@app/websocket.service';
+import {WebsocketService} from '@app/_services/websocket.service';
 
 @NgModule({
   imports: [
