@@ -12,13 +12,15 @@ import {LoginComponent} from './login';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {AuthenticationInterceptor} from '@app/_helpers/authentication.interceptor';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 @NgModule({
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
-    appRoutingModule
-  ],
+    appRoutingModule,
+    BrowserAnimationsModule],
   declarations: [
     AppComponent,
     HomeComponent,

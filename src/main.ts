@@ -1,7 +1,9 @@
 import {enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import {AppModule} from '@app/app.module';
+// DON'T TOUCH: You could write @app/.. here, but then ng-cli will break. Believe me, I learned the hard way...
+// noinspection ES6PreferShortImport
+import {AppModule} from './app/app.module';
 import {environment} from '@environments/environment';
 
 if (environment.production) {
