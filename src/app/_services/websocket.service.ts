@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
-import {Observable} from 'rxjs';
 import {environment} from '@environments/environment';
 
 @Injectable({
@@ -9,11 +8,18 @@ import {environment} from '@environments/environment';
 export class WebsocketService {
   private socket;
 
-  setupSocketConnection() {
-    this.socket = io(environment.websocketUrl);
-    this.socket.emit('my message', 'WebsocketService.setupSocketConnection(): TEST ########');
+  constructor() {
+  }
 
-    this.socket.on('my broadcast', (data: string) => {
+  setupSocketConnection(authToken: string) {
+    this.socket = io(environment.websocketUrl, {
+      transports: ['websocket']
+    });
+
+    this.socket.on('connect', () => {
+      this.login(authToken);
+    });
+    this.socket.on('error', (data: string) => {
       console.log(data);
     });
   }
@@ -22,15 +28,13 @@ export class WebsocketService {
     this.socket.disconnect();
   }
 
-  listen(eventName: string) {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data) => {
-        subscriber.next(data);
-      });
+  private login(authToken: string) {
+    this.socket.emit('login', {
+      token: authToken+'a'
     });
   }
 
-  emit(eventName: string, data: any) {
-    this.socket.emit(eventName, data);
+  startSession() {
+    this.socket.emit('start-sessions', {});
   }
 }

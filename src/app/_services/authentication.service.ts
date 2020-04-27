@@ -37,7 +37,7 @@ export class AuthenticationService {
         const user: User = result.user;
         this.currentUserSubject.next(user);
 
-        this.websocketService.setupSocketConnection();
+        this.websocketService.setupSocketConnection(this.authToken);
 
         return user;
       }));
@@ -54,7 +54,7 @@ export class AuthenticationService {
         this.authToken = token;
         this.currentUserSubject.next(user);
 
-        this.websocketService.setupSocketConnection();
+        this.websocketService.setupSocketConnection(this.authToken);
 
         return user;
       }));
