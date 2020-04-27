@@ -7,4 +7,7 @@
   </ng-template>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<mat-spinner color="accent" *ngIf="loading; else loaded" style="margin: 3em auto" diameter="40"></mat-spinner>
+<ng-template #loaded>
+  <router-outlet></router-outlet>
+</ng-template>

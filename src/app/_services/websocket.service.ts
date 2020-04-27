@@ -11,18 +11,22 @@ export class WebsocketService {
 
   setupSocketConnection() {
     this.socket = io(environment.websocketUrl);
-    this.socket.emit('my message', 'WebsocketService.setupSocketConnection(): TEST ########')
+    this.socket.emit('my message', 'WebsocketService.setupSocketConnection(): TEST ########');
 
     this.socket.on('my broadcast', (data: string) => {
       console.log(data);
     });
   }
 
+  closeSocketConnection() {
+    this.socket.disconnect();
+  }
+
   listen(eventName: string) {
     return new Observable((subscriber) => {
       this.socket.on(eventName, (data) => {
         subscriber.next(data);
-      })
+      });
     });
   }
 
