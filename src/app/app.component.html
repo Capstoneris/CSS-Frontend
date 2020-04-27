@@ -1,15 +1,10 @@
-﻿<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/">Home</a>
-    <a class="nav-item nav-link" (click)="logout()">Logout</a>
-  </div>
-</nav>
-
-<!-- main app container -->
-<div class="container">
-  <div *ngIf="loading; else loaded" class="spinner-border spinner-border-sm"></div>
-  <ng-template #loaded>
-    <router-outlet></router-outlet>
+﻿<mat-toolbar color="primary" class="mat-elevation-z1">
+  <span>Capturis Session Share</span>
+  <ng-template [ngIf]="currentUser">
+    <button mat-button routerLink="/" style="margin-left: 1em">Home</button>
+    <button mat-button (click)="logout()" style="margin-left: auto">Logout</button>
+    <span style="margin-left: 1em">{{currentUser.username}}</span>
   </ng-template>
-</div>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
