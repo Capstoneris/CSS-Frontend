@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import {environment} from '@environments/environment';
 export class WebsocketService {
   private socket;
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
   }
 
   setupSocketConnection(authToken: string) {
@@ -19,8 +20,10 @@ export class WebsocketService {
     this.socket.on('connect', () => {
       this.login(authToken);
     });
-    this.socket.on('error', (data: string) => {
-      console.log(data);
+    this.socket.on('error', (error: any) => {
+      this.snackBar.open(`Socket Error ${error.status}: ${error.message}`, 'Dismiss', {
+        duration: 3000
+      })
     });
   }
 
@@ -30,7 +33,7 @@ export class WebsocketService {
 
   private login(authToken: string) {
     this.socket.emit('login', {
-      token: authToken+'a'
+      token: authToken
     });
   }
 
