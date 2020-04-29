@@ -5,6 +5,7 @@ import {catchError, map} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
 import {User} from '@app/_models';
+import {WebsocketService} from '@app/_services/websocket.service';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -15,7 +16,7 @@ export class AuthenticationService {
 
   public authToken: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private websocketService: WebsocketService) {
     this.currentUserSubject = new BehaviorSubject<User>(null);
     this.currentUser = this.currentUserSubject.asObservable();
 
@@ -35,6 +36,9 @@ export class AuthenticationService {
       .pipe(map(result => {
         const user: User = result.user;
         this.currentUserSubject.next(user);
+
+        this.websocketService.setupSocketConnection(this.authToken);
+
         return user;
       }));
   }
@@ -46,8 +50,12 @@ export class AuthenticationService {
         const user: User = result.user;
         const token: string = result.token;
         localStorage.setItem(this.LOCAL_STORAGE_JWT, token);
+
         this.authToken = token;
         this.currentUserSubject.next(user);
+
+        this.websocketService.setupSocketConnection(this.authToken);
+
         return user;
       }));
   }
@@ -56,6 +64,7 @@ export class AuthenticationService {
     return this.http.post(`${environment.apiUrl}/auth/logout`, null)
       .subscribe(() => {
         // logout successful
+        this.websocketService.closeSocketConnection();
         this.currentUserSubject.next(null);
         localStorage.removeItem(this.LOCAL_STORAGE_JWT);
         this.authToken = null;

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
-import {Observable} from 'rxjs';
 import {environment} from '@environments/environment';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -9,24 +9,35 @@ import {environment} from '@environments/environment';
 export class WebsocketService {
   private socket;
 
-  setupSocketConnection() {
-    this.socket = io(environment.websocketUrl);
-    this.socket.emit('my message', 'WebsocketService.setupSocketConnection(): TEST ########')
-
-    this.socket.on('my broadcast', (data: string) => {
-      console.log(data);
-    });
+  constructor(private snackBar: MatSnackBar) {
   }
 
-  listen(eventName: string) {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data) => {
-        subscriber.next(data);
+  setupSocketConnection(authToken: string) {
+    this.socket = io(environment.websocketUrl, {
+      transports: ['websocket']
+    });
+
+    this.socket.on('connect', () => {
+      this.login(authToken);
+    });
+    this.socket.on('error', (error: any) => {
+      this.snackBar.open(`Socket Error ${error.status}: ${error.message}`, 'Dismiss', {
+        duration: 3000
       })
     });
   }
 
-  emit(eventName: string, data: any) {
-    this.socket.emit(eventName, data);
+  closeSocketConnection() {
+    this.socket.disconnect();
+  }
+
+  private login(authToken: string) {
+    this.socket.emit('login', {
+      token: authToken
+    });
+  }
+
+  startSession() {
+    this.socket.emit('start-sessions', {});
   }
 }
