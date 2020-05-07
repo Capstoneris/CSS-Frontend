@@ -26,6 +26,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatOptionModule} from '@angular/material/core';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {ExampleFormComponent} from "@app/example-form/example-form.component";
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    ExampleFormComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
