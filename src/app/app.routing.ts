@@ -3,7 +3,7 @@
 import {HomeComponent} from './home';
 import {LoginComponent} from './login';
 import {AuthGuard} from './_helpers';
-import {ExampleFormComponent} from "./example-form";
+import {ExampleFormComponent} from './example-form';
 
 
 const routes: Routes = [
