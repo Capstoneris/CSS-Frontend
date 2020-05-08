@@ -26,7 +26,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatOptionModule} from '@angular/material/core';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {ExampleFormComponent} from "@app/example-form/example-form.component";
+import {ExampleFormComponent} from '@app/example-form/example-form.component';
 
 @NgModule({
   imports: [
