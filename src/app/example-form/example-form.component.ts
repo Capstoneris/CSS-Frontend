@@ -8,7 +8,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   styleUrls: ['./example-form.component.scss']
 })
 export class ExampleFormComponent implements OnInit {
-  m_form: FormGroup;
+  exampleForm: FormGroup;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute,
               private router: Router,) {
