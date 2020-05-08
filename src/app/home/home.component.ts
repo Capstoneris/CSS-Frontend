@@ -30,6 +30,6 @@ export class HomeComponent implements OnInit {
 
   gotoFormSite(){
     this.router.navigate(['/example-form']);
-    console.log("BUTTON CLICKED....")
+    console.log('*** FORM BUTTON CLICKED ***')
   }
 }
