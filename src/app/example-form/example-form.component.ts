@@ -28,7 +28,7 @@ export class ExampleFormComponent implements OnInit {
     {value: 'bmw', viewValue: 'BMW'},
     {value: 'vw', viewValue: 'Volkswagen'},
     {value: 'mercedes', viewValue: 'Mercedes Benz'},
-  ]
+  ];
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -57,13 +57,13 @@ export class ExampleFormComponent implements OnInit {
     const phone = this.formBuilder.group({
       prefix:['', [
         Validators.required,
-        Validators.pattern("^[0-9]*$"),
+        Validators.pattern('^[0-9]*$'),
       ]],
       number:['', [
         Validators.required,
-        Validators.pattern("^[0-9]*$"),
+        Validators.pattern('^[0-9]*$'),
       ]],
-    })
+    });
 
     this.phoneForms.push(phone);
   }
