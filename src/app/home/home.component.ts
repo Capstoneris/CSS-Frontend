@@ -26,10 +26,6 @@ export class HomeComponent implements OnInit {
 
   startSession() {
     this.websocketService.startSession();
-  }
-
-  gotoFormSite(){
     this.router.navigate(['/example-form']);
-    console.log('*** FORM BUTTON CLICKED ***')
   }
 }

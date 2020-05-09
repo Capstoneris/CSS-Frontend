@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
-
 
 @Component({
   templateUrl: './example-form.component.html',
@@ -10,18 +8,13 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class ExampleFormComponent implements OnInit {
   exampleForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,
-              private router: Router,) {
+  constructor(private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
-    this.exampleForm = this.fb.group({
+    this.exampleForm = this.formBuilder.group({
       name: '',
       message: 'test default message'
-    })
-
-    // subscribe to observable
-    this.exampleForm.valueChanges.subscribe(console.log)
+    });
   }
-
 }
