@@ -15,13 +15,13 @@ export class ExampleFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.m_form = this.fb.group({
+    this.exampleForm = this.fb.group({
       name: '',
       message: 'test default message'
     })
 
     // subscribe to observable
-    this.m_form.valueChanges.subscribe(console.log)
+    this.exampleForm.valueChanges.subscribe(console.log)
   }
 
 }
