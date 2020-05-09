@@ -23,7 +23,7 @@ export class WebsocketService {
     this.socket.on('error', (error: any) => {
       this.snackBar.open(`Socket Error ${error.status}: ${error.message}`, 'Dismiss', {
         duration: 3000
-      })
+      });
     });
   }
 
