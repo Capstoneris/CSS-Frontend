@@ -6,7 +6,7 @@
       <h2>1: Text Form</h2>
       <p>Please enter some data...</p>
       <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name" />
+        <input matInput placeholder="Name" formControlName="name"/>
       </mat-form-field>
       <mat-form-field>
         <textarea matInput placeholder="Message" formControlName="message"></textarea>
@@ -17,14 +17,14 @@
         <div *ngFor="let phone of phoneForms.controls; let i=index" [formGroupName]="i">
 
           <mat-form-field>
-            <input matInput placeholder="Prefix Number" formControlName="prefix" />
+            <input matInput placeholder="Prefix Number" formControlName="prefix"/>
             <mat-error *ngIf="getPhonePrefix(i).invalid && getPhonePrefix(i).dirty">
               Please enter only digits from 0 to 9
             </mat-error>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Phone Number" formControlName="number" />
+            <input matInput placeholder="Phone Number" formControlName="number"/>
             <mat-error *ngIf="getPhoneNumber(i).invalid && getPhoneNumber(i).dirty">
               Please enter only digits from 0 to 9
             </mat-error>
@@ -33,13 +33,57 @@
           <button mat-raised-button color="warn" (click)="deletePhone(i)">Delete</button>
 
         </div>
+        <button mat-raised-button [disabled]="exampleForm.invalid" color="primary" (click)="addPhone()">Add</button>
       </div>
 
-      <button mat-raised-button [disabled]="exampleForm.invalid" color="primary" (click)="addPhone()">Add</button>
+      <h2>3: Radio Buttons</h2>
+      <p>Pick your favorite fruit</p>
+      <mat-radio-group [(ngModel)]="favoriteFruit" [ngModelOptions]="{standalone: true}"
+                       style="display: flex; flex-direction: column; margin: 15px 0;">
+        <mat-radio-button *ngFor="let fruit of fruits" [value]="fruit"
+                          style="margin: 3px;">
+          {{fruit}}
+        </mat-radio-button>
+      </mat-radio-group>
+      <p>Your favorite fruit is: {{favoriteFruit}}</p>
 
-      <h2>3: Checkboxes and Radio Buttons</h2>
-      <h2>4: Select Boxes</h2>
-      <h2>5: Slider</h2>
+      <h2>4: Checkboxes</h2>
+
+      <mat-card>
+        <mat-card-content>
+
+          <h3>Checkbox configuration</h3>
+          <mat-checkbox style="margin: 10px;" [(ngModel)]="checked" [ngModelOptions]="{standalone: true}">Checked</mat-checkbox>
+          <mat-checkbox style="margin: 10px;" [(ngModel)]="disabled" [ngModelOptions]="{standalone: true}">Disabled</mat-checkbox>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-content>
+
+          <h3>Result</h3>
+          <mat-checkbox style="margin: 10px;" [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" [disabled]="disabled">
+            I'm a checkbox
+          </mat-checkbox>
+
+        </mat-card-content>
+      </mat-card>
+
+
+      <h2>5: Select Boxes</h2>
+      <h4>mat-select</h4>
+      <mat-form-field>
+        <mat-label>Favorite car</mat-label>
+        <mat-select [(ngModel)]="selectedCar" name="car" [ngModelOptions]="{standalone: true}">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let car of cars" [value]="car.value">
+            {{car.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <p> Selected car: {{selectedCar}} </p>
+
+      <h2>6: Slider</h2>
 
     </form>
   </mat-card-content>
