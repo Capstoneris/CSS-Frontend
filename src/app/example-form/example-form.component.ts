@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
-// For Select Box
+interface Fruit {
+  value: string;
+  viewValue: string;
+}
+
 interface Car {
   value: string;
   viewValue: string;
@@ -14,17 +18,15 @@ interface Car {
 export class ExampleFormComponent implements OnInit {
   exampleForm: FormGroup;
 
-  // For Radio Buttons
-  favoriteFruit: string;
-  fruits: string[] = ['Apple', 'Orange', 'Banana', 'Strawberry', 'Watermelon'];
+  fruitChoices: Fruit[] = [
+    {value: 'apple', viewValue: 'Apple'},
+    {value: 'orange', viewValue: 'Orange'},
+    {value: 'banana', viewValue: 'Banana'},
+    {value: 'strawberry', viewValue: 'Strawberry'},
+    {value: 'watermelon', viewValue: 'Watermelon'}
+  ];
 
-  // For Checkboxes
-  checked = false;
-  disabled = false;
-
-  // For Select Box
-  selectedCar: string;
-  cars: Car[] = [
+  carChoices: Car[] = [
     {value: 'bmw', viewValue: 'BMW'},
     {value: 'vw', viewValue: 'Volkswagen'},
     {value: 'mercedes', viewValue: 'Mercedes Benz'},
@@ -35,40 +37,13 @@ export class ExampleFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.exampleForm = this.formBuilder.group({
-      name: '',
-      message: 'test default message',
-      phones: this.formBuilder.array([])
-    });
-  }
-
-  get phoneForms(){
-    return this.exampleForm.get('phones') as FormArray;
-  }
-
-  getPhonePrefix(i){
-    return this.phoneForms.at(i).get('prefix');
-  }
-
-  getPhoneNumber(i){
-    return this.phoneForms.at(i).get('number');
-  }
-
-  addPhone(){
-    const phone = this.formBuilder.group({
-      prefix:['', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]],
-      number:['', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-      ]],
+      favouriteCity: '',
+      favouriteFruit: null,
+      favouriteCar: null,
+      imFeelingHappy: false,
+      happiness: 50
     });
 
-    this.phoneForms.push(phone);
-  }
-
-  deletePhone(i){
-    this.phoneForms.removeAt(i);
+    this.exampleForm.valueChanges.subscribe(x => console.log(x));
   }
 }

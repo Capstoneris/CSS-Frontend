@@ -1,89 +1,36 @@
-<h1>Form Examples</h1>
 <mat-card class="mat-elevation-z3">
   <mat-card-content>
     <form [formGroup]="exampleForm">
 
-      <h2>1: Text Form</h2>
-      <p>Please enter some data...</p>
+      <h2>Example Form</h2>
+
+      <p>Please enter the name of your favourite city:</p>
       <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name"/>
-      </mat-form-field>
-      <mat-form-field>
-        <textarea matInput placeholder="Message" formControlName="message"></textarea>
+        <input matInput placeholder="City name" formControlName="favouriteCity"/>
       </mat-form-field>
 
-      <h2>2: Dynamic List (phone numbers)</h2>
-      <div formArrayName="phones">
-        <div *ngFor="let phone of phoneForms.controls; let i=index" [formGroupName]="i">
-
-          <mat-form-field>
-            <input matInput placeholder="Prefix Number" formControlName="prefix"/>
-            <mat-error *ngIf="getPhonePrefix(i).invalid && getPhonePrefix(i).dirty">
-              Please enter only digits from 0 to 9
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput placeholder="Phone Number" formControlName="number"/>
-            <mat-error *ngIf="getPhoneNumber(i).invalid && getPhoneNumber(i).dirty">
-              Please enter only digits from 0 to 9
-            </mat-error>
-          </mat-form-field>
-
-          <button mat-raised-button color="warn" (click)="deletePhone(i)">Delete</button>
-
-        </div>
-        <button mat-raised-button [disabled]="exampleForm.invalid" color="primary" (click)="addPhone()">Add</button>
-      </div>
-
-      <h2>3: Radio Buttons</h2>
-      <p>Pick your favorite fruit</p>
-      <mat-radio-group [(ngModel)]="favoriteFruit" [ngModelOptions]="{standalone: true}"
-                       style="display: flex; flex-direction: column; margin: 15px 0;">
-        <mat-radio-button *ngFor="let fruit of fruits" [value]="fruit"
-                          style="margin: 3px;">
-          {{fruit}}
+      <p>Pick your favorite fruit:</p>
+      <mat-radio-group formControlName="favouriteFruit" style="margin: -1em -1em 1.25em;">
+        <mat-radio-button *ngFor="let fruit of fruitChoices" [value]="fruit.value" style="margin: 1em;">
+          {{fruit.viewValue}}
         </mat-radio-button>
       </mat-radio-group>
-      <p>Your favorite fruit is: {{favoriteFruit}}</p>
 
-      <h2>4: Checkboxes</h2>
-
-      <mat-card>
-        <mat-card-content>
-
-          <h3>Checkbox configuration</h3>
-          <mat-checkbox style="margin: 10px;" [(ngModel)]="checked" [ngModelOptions]="{standalone: true}">Checked</mat-checkbox>
-          <mat-checkbox style="margin: 10px;" [(ngModel)]="disabled" [ngModelOptions]="{standalone: true}">Disabled</mat-checkbox>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card>
-        <mat-card-content>
-
-          <h3>Result</h3>
-          <mat-checkbox style="margin: 10px;" [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" [disabled]="disabled">
-            I'm a checkbox
-          </mat-checkbox>
-
-        </mat-card-content>
-      </mat-card>
-
-
-      <h2>5: Select Boxes</h2>
-      <h4>mat-select</h4>
+      <p>What's your favourite car?</p>
       <mat-form-field>
-        <mat-label>Favorite car</mat-label>
-        <mat-select [(ngModel)]="selectedCar" name="car" [ngModelOptions]="{standalone: true}">
+        <mat-select placeholder="Car brand" formControlName="favouriteCar">
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let car of cars" [value]="car.value">
+          <mat-option *ngFor="let car of carChoices" [value]="car.value">
             {{car.viewValue}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <p> Selected car: {{selectedCar}} </p>
 
-      <h2>6: Slider</h2>
+      <p>How are you?</p>
+      <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;">I'm feeling happy!</mat-checkbox>
+
+      <p>Happiness:</p>
+      <mat-slider min="1" max="100" step="1" formControlName="happiness"></mat-slider>
 
     </form>
   </mat-card-content>

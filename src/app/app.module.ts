@@ -23,12 +23,12 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import {MatDividerModule} from '@angular/material/divider';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatOptionModule} from '@angular/material/core';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ExampleFormComponent} from '@app/example-form/example-form.component';
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
   imports: [
@@ -47,7 +47,7 @@ import {ExampleFormComponent} from '@app/example-form/example-form.component';
     MatButtonModule,
     MatTableModule,
     MatDividerModule,
-    MatSlideToggleModule,
+    MatSliderModule,
     MatSelectModule,
     MatOptionModule,
     MatProgressSpinnerModule,

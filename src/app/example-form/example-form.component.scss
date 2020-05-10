@@ -2,6 +2,9 @@ mat-card {
   margin: 1em;
 }
 
-mat-form-field {
+mat-form-field,
+mat-radio-group,
+mat-checkbox,
+mat-slider {
   display: block;
 }
