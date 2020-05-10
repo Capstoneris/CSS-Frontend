@@ -3,13 +3,17 @@
 import {User} from '@app/_models';
 import {UserService} from '@app/_services';
 import {WebsocketService} from '@app/_services/websocket.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({templateUrl: 'home.component.html'})
 export class HomeComponent implements OnInit {
   loading = false;
   users: User[];
 
-  constructor(private userService: UserService, private websocketService: WebsocketService) {
+  constructor(private userService: UserService,
+              private websocketService: WebsocketService,
+              private route: ActivatedRoute,
+              private router: Router,) {
   }
 
   ngOnInit() {
@@ -22,5 +26,6 @@ export class HomeComponent implements OnInit {
 
   startSession() {
     this.websocketService.startSession();
+    this.router.navigate(['/example-form']);
   }
 }
