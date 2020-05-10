@@ -11,15 +11,12 @@ import {WebsocketService} from '@app/_services/websocket.service';
 export class AuthenticationService {
   private readonly LOCAL_STORAGE_JWT = 'jwt';
 
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  public readonly currentUser: Observable<User> = this.currentUserSubject.asObservable();
 
   public authToken: string;
 
   constructor(private http: HttpClient, private websocketService: WebsocketService) {
-    this.currentUserSubject = new BehaviorSubject<User>(null);
-    this.currentUser = this.currentUserSubject.asObservable();
-
     this.authToken = localStorage.getItem(this.LOCAL_STORAGE_JWT);
   }
 

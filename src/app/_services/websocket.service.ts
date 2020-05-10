@@ -2,13 +2,17 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Group, User} from '@app/_models';
+import {Group, Invitation, User} from '@app/_models';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
   private socket;
+
+  private invitationsSubject: BehaviorSubject<Invitation[]> = new BehaviorSubject<Invitation[]>([]);
+  public readonly invitations: Observable<Invitation[]> = this.invitationsSubject.asObservable();
 
   constructor(private snackBar: MatSnackBar) {
   }
@@ -25,6 +29,14 @@ export class WebsocketService {
       this.snackBar.open(`Socket Error ${error.status}: ${error.message}`, 'Dismiss', {
         duration: 3000
       });
+    });
+    this.socket.on('hello', (data: any) => {
+      const invites: Invitation[] = data.invites;
+      this.invitationsSubject.next(invites);
+    });
+    this.socket.on('invitation-list-update', (data:any) => {
+      const invites: Invitation[] = data.invites;
+      this.invitationsSubject.next(invites);
     });
   }
 

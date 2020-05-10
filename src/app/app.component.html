@@ -1,12 +1,22 @@
 ﻿<mat-toolbar color="primary" class="mat-elevation-z1">
   <span>Capturis Session Share</span>
-  <ng-template [ngIf]="currentUser">
+  <ng-template [ngIf]="(authenticationService.currentUser | async)">
     <button mat-button routerLink="/" style="margin-left: 1em">Home</button>
     <button mat-button routerLink="/example-form" style="margin-left: 1em">Example Form</button>
-    <button mat-button (click)="logout()" style="margin-left: auto">Logout</button>
-    <span style="margin-left: 1em">{{currentUser.username}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="invitationsMenu"
+            [matBadge]="(websocketService.invitations | async).length.toString()"
+            [matBadgeHidden]="!(websocketService.invitations | async).length" matBadgeColor="accent"
+            matBadgePosition="above before" style="margin-left: auto;">
+      <mat-icon>group_add</mat-icon>
+    </button>
+    <button mat-button (click)="logout()" style="margin-left: 1em">Logout</button>
+    <span style="margin-left: 1em">{{(authenticationService.currentUser | async).username}}</span>
   </ng-template>
 </mat-toolbar>
+
+<mat-menu class="popover-menu" #invitationsMenu="matMenu">
+  <app-invitation-list></app-invitation-list>
+</mat-menu>
 
 <mat-spinner color="accent" *ngIf="loading; else loaded" style="margin: 3em auto" diameter="40"></mat-spinner>
 <ng-template #loaded>
