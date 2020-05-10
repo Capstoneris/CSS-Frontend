@@ -1,1 +1,29 @@
-﻿<button mat-raised-button color="primary" style="margin: 1em" (click)="startSession()">Start Session</button>
+﻿<mat-card class="mat-elevation-z3" style="margin: 1em;">
+  <mat-card-content>
+    <form [formGroup]="startSessionForm" (ngSubmit)="startSession()">
+      <h2>Start Session</h2>
+
+      <mat-form-field style="display: block;">
+        <mat-select placeholder="Group" formControlName="group">
+          <mat-option *ngFor="let group of groupChoices" [value]="group">
+            {{group.title}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field style="display: block">
+        <textarea matInput placeholder="Invatation Message" formControlName="message"></textarea>
+      </mat-form-field>
+
+      <mat-form-field style="display: block;">
+        <mat-select multiple placeholder="Invited users" formControlName="users">
+          <mat-option *ngFor="let user of userChoices" [value]="user">
+            {{user.username}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary">Start Session</button>
+    </form>
+  </mat-card-content>
+</mat-card>

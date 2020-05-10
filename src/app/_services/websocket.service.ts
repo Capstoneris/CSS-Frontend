@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Group, User} from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,12 @@ export class WebsocketService {
     });
   }
 
-  startSession() {
-    this.socket.emit('start-sessions', {});
+  startSession(group: Group, startMessage: string, users: User[]) {
+    this.socket.emit('start-session', {
+      timestamp: Date.now(),
+      groupName: group.title,
+      startMessageContent: startMessage,
+      users
+    });
   }
 }
