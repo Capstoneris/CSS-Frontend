@@ -35,9 +35,9 @@ jobs:
       - name: Lint source code
         run: npm run lint
 
-      - name: Run tests
-        run: |
-          npm run test
+#      - name: Run tests
+#        run: |
+#          npm run test
 
 #      - name: Test E2E
 #        run: |
