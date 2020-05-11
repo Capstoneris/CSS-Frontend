@@ -9,8 +9,8 @@ export class AppComponent implements OnInit {
   loading = true;
 
   constructor(private router: Router,
-              private authenticationService: AuthenticationService,
-              private websocketService: WebsocketService) {
+              public authenticationService: AuthenticationService,
+              public websocketService: WebsocketService) {
   }
 
   ngOnInit() {

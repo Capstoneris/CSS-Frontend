@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Invitation} from '@app/_models';
 import {WebsocketService} from '@app/_services/websocket.service';
 
 @Component({
@@ -8,7 +7,7 @@ import {WebsocketService} from '@app/_services/websocket.service';
   styleUrls: ['./invitation-list.component.scss']
 })
 export class InvitationListComponent implements OnInit {
-  constructor(private websocketService:WebsocketService) {
+  constructor(public websocketService: WebsocketService) {
   }
 
   ngOnInit(): void {

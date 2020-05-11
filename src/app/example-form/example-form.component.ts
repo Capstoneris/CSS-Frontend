@@ -64,6 +64,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   // The stuff below is quite hacky and ugly, but it works, so ...
   // That's what happens if one makes a C# developer write Angular code :D
 
+  // TODO: Somehow use bindings instead?
+
   linkField(field: any): void {
     if (field instanceof ElementRef && field.nativeElement instanceof HTMLInputElement) {
       const input: HTMLInputElement = field.nativeElement;
