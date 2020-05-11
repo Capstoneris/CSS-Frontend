@@ -7,7 +7,7 @@
         <p matLine class="mat-small"
            style="font-size: 13px; color: #73818f; margin: 0; max-width: 200px; white-space: normal;">{{invitation.message}}</p>
       </div>
-      <button mat-raised-button color="primary" style="margin-left: 2em;">Join Session</button>
+      <button mat-raised-button color="primary" style="margin-left: 2em;" (click)="websocketService.joinSession(invitation.host)">Join Session</button>
     </mat-list-item>
   </mat-list>
   <ng-template #noInvitations>

@@ -4,6 +4,7 @@ import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Group, Invitation, User} from '@app/_models';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class WebsocketService {
   private invitationsSubject: BehaviorSubject<Invitation[]> = new BehaviorSubject<Invitation[]>([]);
   public readonly invitations: Observable<Invitation[]> = this.invitationsSubject.asObservable();
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar, private router: Router) {
   }
 
   setupSocketConnection(authToken: string) {
@@ -31,12 +32,18 @@ export class WebsocketService {
       });
     });
     this.socket.on('hello', (data: any) => {
-      const invites: Invitation[] = data.invites;
-      this.invitationsSubject.next(invites);
+      const invitations: Invitation[] = data.invitations;
+      this.invitationsSubject.next(invitations);
     });
-    this.socket.on('invitation-list-update', (data:any) => {
-      const invites: Invitation[] = data.invites;
-      this.invitationsSubject.next(invites);
+    this.socket.on('invitation-list-update', (data: any) => {
+      const invitations: Invitation[] = data.invitations;
+      this.invitationsSubject.next(invitations);
+    });
+    this.socket.on('session-started', () => {
+      this.router.navigate(['/example-form']);
+    });
+    this.socket.on('session-joined', () => {
+      this.router.navigate(['/example-form']);
     });
   }
 
@@ -50,12 +57,30 @@ export class WebsocketService {
     });
   }
 
-  startSession(group: Group, startMessage: string, users: User[]) {
+  startSession(group: Group, message: string, users: User[]) {
     this.socket.emit('start-session', {
       timestamp: Date.now(),
-      groupName: group.title,
-      startMessageContent: startMessage,
-      users
+      group,
+      message,
+      users,
+      inputfieldStates: [] // TODO
+    });
+  }
+
+  joinSession(host: User) {
+    this.socket.emit('join-session', {
+      host
+    });
+  }
+
+  sendInputfieldInteraction(fieldId: string, oldValue: string, newValue: string, selectionStart: number, selectionEnd: number) {
+    this.socket.emit('inputfield-interaction', {
+      fieldId,
+      changed: !!oldValue && !!newValue,
+      oldValue,
+      newValue,
+      selectionStart,
+      selectionEnd
     });
   }
 }
