@@ -73,12 +73,13 @@ export class WebsocketService {
     });
   }
 
-  sendInputfieldInteraction(fieldId: string, oldValue: string, newValue: string, selectionStart: number, selectionEnd: number) {
+  sendInputfieldInteraction(fieldId: string, changed: boolean, oldValue: string, newValue: string, selectionStart: number,
+                            selectionEnd: number) {
     this.socket.emit('inputfield-interaction', {
       fieldId,
-      changed: !!oldValue && !!newValue,
-      oldValue,
-      newValue,
+      changed,
+      oldValue: changed ? oldValue : '',
+      newValue: changed ? newValue : '',
       selectionStart,
       selectionEnd
     });

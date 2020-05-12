@@ -72,12 +72,12 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       const fieldId = input.getAttribute('formControlName');
       let prevValue = input.value;
       input.addEventListener('mouseup', e => {
-        this.websocketService.sendInputfieldInteraction(fieldId, null, null, input.selectionStart, input.selectionEnd);
+        this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, input.selectionStart, input.selectionEnd);
       });
       input.addEventListener('keyup', e => {
         const newValue = input.value;
         if (newValue !== prevValue) {
-          this.websocketService.sendInputfieldInteraction(fieldId, prevValue, newValue, input.selectionStart, input.selectionEnd);
+          this.websocketService.sendInputfieldInteraction(fieldId, true, prevValue, newValue, input.selectionStart, input.selectionEnd);
           prevValue = newValue;
         }
       });
