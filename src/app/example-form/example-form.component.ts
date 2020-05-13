@@ -5,6 +5,8 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {MatSlider} from '@angular/material/slider';
 import {MatSelect} from '@angular/material/select';
 import {WebsocketService} from '@app/_services/websocket.service';
+import {debounceTime, pairwise, startWith} from 'rxjs/operators';
+import {InputfieldState, User} from '@app/_models';
 
 interface Fruit {
   value: string;
@@ -40,58 +42,122 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     {value: 'mercedes', viewValue: 'Mercedes Benz'},
   ];
 
+  private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
+
   constructor(private formBuilder: FormBuilder, private websocketService: WebsocketService) {
   }
 
   ngOnInit(): void {
     this.exampleForm = this.formBuilder.group({
       favouriteCity: '',
-      favouriteFruit: null,
-      favouriteCar: null,
+      favouriteFruit: '',
+      favouriteCar: '',
       imFeelingHappy: false,
       happiness: 50
     });
 
-    // this.exampleForm.valueChanges.subscribe(x => console.log(x));
+    // Typed the startWith value to not implicitly use deprecated signature: https://github.com/ReactiveX/rxjs/issues/4772
+    this.exampleForm.valueChanges.pipe(debounceTime(100), startWith(this.exampleForm.value as object), pairwise())
+      .subscribe(([prev, next]) => this.handleChanges(prev, next));
   }
 
   ngAfterViewInit(): void {
+    // Used to gain direct access to the HTML elements
     for (const field of this.synchronizedFields) {
       this.linkField(field);
     }
+
+    this.websocketService.listenForInputfieldChanges().subscribe(({user, state}) => this.applyChanges(user, state));
+  }
+
+  handleChanges(prev: object, next: object): void {
+    for (const fieldId in prev) {
+      if (!prev.hasOwnProperty(fieldId) || !next.hasOwnProperty(fieldId)) {
+        continue;
+      }
+
+      const prevValue = prev[fieldId];
+      const nextValue = next[fieldId];
+
+      // Value changed?
+      if (prevValue === nextValue) {
+        continue;
+      }
+
+      // Get current selection, if supported
+      let selectionStart = 0;
+      let selectionEnd = 0;
+      if (this.fieldLinks.has(fieldId)) {
+        const field = this.fieldLinks.get(fieldId);
+        if (field instanceof HTMLInputElement) {
+          const inputField = field as HTMLInputElement;
+          selectionStart = inputField.selectionStart;
+          selectionEnd = inputField.selectionEnd;
+        }
+      }
+
+      // Send change notification
+      this.websocketService.sendInputfieldInteraction(fieldId, true, prevValue?.toString(),
+        nextValue?.toString(), selectionStart, selectionEnd);
+    }
+  }
+
+  applyChanges(byUser: User, state: InputfieldState) {
+    const fieldId = state.fieldId;
+
+    // Analyze field value type
+    const fieldType = typeof this.exampleForm.value[fieldId];
+
+    // Convert value if necessary
+    let value: any = state.value;
+    if (fieldType === 'boolean') {
+      value = (value === 'true');
+    } else if (fieldType === 'number') {
+      value = parseInt(value, 10);
+    } else if (fieldType !== 'string') {
+      console.error(`Cannot convert received value to field type ${fieldType}.`);
+      return;
+    }
+
+    // Check if the value is different from the displayed one
+    // Compare to value of form control directly to mitigate race conditions: https://stackoverflow.com/a/44898740/5495384
+    if (this.exampleForm.controls[fieldId].value === value) {
+      return;
+    }
+
+    // Apply new field state
+    this.exampleForm.patchValue({
+      [fieldId]: value
+    }, {emitEvent: false});
   }
 
   // The stuff below is quite hacky and ugly, but it works, so ...
-  // That's what happens if one makes a C# developer write Angular code :D
-
-  // TODO: Somehow use bindings instead?
-
+  // This is what happens if one makes a C# developer write Angular code :P
   linkField(field: any): void {
+    let fieldId: string;
+    let element: HTMLElement;
+
     if (field instanceof ElementRef && field.nativeElement instanceof HTMLInputElement) {
-      const input: HTMLInputElement = field.nativeElement;
-      const fieldId = input.getAttribute('formControlName');
-      let prevValue = input.value;
-      input.addEventListener('mouseup', e => {
-        this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, input.selectionStart, input.selectionEnd);
-      });
-      input.addEventListener('keyup', e => {
-        const newValue = input.value;
-        if (newValue !== prevValue) {
-          this.websocketService.sendInputfieldInteraction(fieldId, true, prevValue, newValue, input.selectionStart, input.selectionEnd);
-          prevValue = newValue;
-        }
-      });
+      element = field.nativeElement;
+      fieldId = element.getAttribute('formControlName');
+      // input.addEventListener('mouseup', e => {
+      //   this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, input.selectionStart, input.selectionEnd);
+      // });
     } else if (field instanceof MatRadioButton) {
-      // TODO
+      return; // TODO
     } else if (field instanceof MatSelect) {
-      // TODO
+      return; // TODO
     } else if (field instanceof MatCheckbox) {
-      // TODO
+      return; // TODO
     } else if (field instanceof MatSlider) {
-      // TODO
+      return; // TODO
     } else {
-      console.log('Unsupported field:');
-      console.log(field);
+      console.error('Unsupported field:');
+      console.error(field);
+      return;
     }
+    console.assert(!!fieldId);
+    console.assert(!!element);
+    this.fieldLinks.set(fieldId, element);
   }
 }

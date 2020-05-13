@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Group, Invitation, User} from '@app/_models';
+import {Group, InputfieldState, Invitation, User} from '@app/_models';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
@@ -82,6 +82,12 @@ export class WebsocketService {
       newValue: changed ? newValue : '',
       selectionStart,
       selectionEnd
+    });
+  }
+
+  listenForInputfieldChanges() {
+    return new Observable<{ user: User, state: InputfieldState }>(subscriber => {
+      this.socket.on('inputfield-changed', data => subscriber.next(data));
     });
   }
 }
