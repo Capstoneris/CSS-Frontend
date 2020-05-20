@@ -6,3 +6,22 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.popover-menu.mat-menu-panel {
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.popover-menu .mat-menu-content:not(:empty) {
+  padding: 0;
+}
+
+.menu-form-wrapper .menu-form {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}

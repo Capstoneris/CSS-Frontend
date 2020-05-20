@@ -1,0 +1,19 @@
+<div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+  <mat-list *ngIf="(websocketService.invitations | async).length; else noInvitations" style="padding: 0;">
+    <mat-list-item *ngFor="let invitation of (websocketService.invitations | async)"
+                   style="display: flex; flex-direction: row; align-items: center; height: auto;">
+      <div style="padding: 16px 0;">
+        <p matLine style="margin: 0 0 0.2em 0;">Invitation from {{invitation.host.username}}</p>
+        <p matLine class="mat-small"
+           style="font-size: 13px; color: #73818f; margin: 0; max-width: 200px; white-space: normal;">{{invitation.message}}</p>
+      </div>
+      <button mat-raised-button color="primary" style="margin-left: 2em;" (click)="websocketService.joinSession(invitation.host)">Join Session</button>
+    </mat-list-item>
+  </mat-list>
+  <ng-template #noInvitations>
+    <div style="padding: 1em 2em; display: flex; align-items: center;">
+      <mat-icon>emoji_people</mat-icon>
+      <span style="margin-left: 1em;">No current invitations.</span>
+    </div>
+  </ng-template>
+</div>

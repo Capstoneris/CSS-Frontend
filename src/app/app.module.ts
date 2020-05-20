@@ -25,10 +25,13 @@ import {MatTableModule} from '@angular/material/table';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatOptionModule} from '@angular/material/core';
+import {MatLineModule, MatOptionModule} from '@angular/material/core';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ExampleFormComponent} from '@app/example-form/example-form.component';
 import {MatSliderModule} from '@angular/material/slider';
+import {InvitationListComponent} from './invitation-list/invitation-list.component';
+import {MatListModule} from '@angular/material/list';
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
   imports: [
@@ -52,13 +55,17 @@ import {MatSliderModule} from '@angular/material/slider';
     MatOptionModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    FormsModule
+    FormsModule,
+    MatLineModule,
+    MatListModule,
+    MatBadgeModule
   ],
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    ExampleFormComponent
+    ExampleFormComponent,
+    InvitationListComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
