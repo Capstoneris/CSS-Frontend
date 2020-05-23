@@ -1,39 +1,87 @@
-<mat-card class="mat-elevation-z3">
-  <mat-card-content>
-    <form [formGroup]="exampleForm">
-      <h2>Example Form</h2>
+<div style="">
 
-      <p>Please enter the name of your favourite city:</p>
-      <mat-form-field>
-        <input matInput placeholder="City name" formControlName="favouriteCity" #synchronizedField/>
-      </mat-form-field>
+  <div fxFlex="70%">
+    <mat-card class="mat-elevation-z3" style="margin-right: 0.5em;">
+      <mat-card-header>
+        <mat-card-title>Example Form</mat-card-title>
+        <mat-card-subtitle>Have fun entering some random stuff!</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="exampleForm">
+          <p>Please enter the name of your favourite city:</p>
+          <mat-form-field>
+            <input matInput placeholder="City name" formControlName="favouriteCity" #synchronizedField/>
+          </mat-form-field>
 
-      <p>Pick your favorite fruit:</p>
-      <mat-radio-group formControlName="favouriteFruit" style="margin: -1em -1em 1.25em;">
-        <mat-radio-button *ngFor="let fruit of fruitChoices" [value]="fruit.value" style="margin: 1em;"
-                          #synchronizedField>
-          {{fruit.viewValue}}
-        </mat-radio-button>
-      </mat-radio-group>
+          <p>Pick your favorite fruit:</p>
+          <mat-radio-group formControlName="favouriteFruit" style="margin: -1em -1em 1.25em;">
+            <mat-radio-button *ngFor="let fruit of fruitChoices" [value]="fruit.value" style="margin: 1em;"
+                              #synchronizedField>
+              {{fruit.viewValue}}
+            </mat-radio-button>
+          </mat-radio-group>
 
-      <p>What's your favourite car?</p>
-      <mat-form-field>
-        <mat-select placeholder="Car brand" formControlName="favouriteCar" #synchronizedField>
-          <mat-option>None</mat-option>
-          <mat-option *ngFor="let car of carChoices" [value]="car.value">
-            {{car.viewValue}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          <p>What's your favourite car?</p>
+          <mat-form-field>
+            <mat-select placeholder="Car brand" formControlName="favouriteCar" #synchronizedField>
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let car of carChoices" [value]="car.value">
+                {{car.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      <p>How are you?</p>
-      <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;" #synchronizedField>I'm feeling
-        happy!
-      </mat-checkbox>
+          <p>How are you?</p>
+          <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;" #synchronizedField>I'm feeling
+            happy!
+          </mat-checkbox>
 
-      <p>Happiness:</p>
-      <mat-slider min="1" max="100" step="1" formControlName="happiness" #synchronizedField></mat-slider>
+          <p>Happiness:</p>
+          <mat-slider min="1" max="100" step="1" formControlName="happiness" #synchronizedField></mat-slider>
 
-    </form>
-  </mat-card-content>
-</mat-card>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div fxFlex="30%">
+    <mat-card class="mat-elevation-z3" style="margin-left: 0.5em;">
+      <mat-card-header>
+        <mat-card-title>Session Members</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list *ngIf="(websocketService.currentSession | async); else startSession" style="padding: 0;">
+          <mat-list-item *ngFor="let user of (websocketService.sessionMembers | async)"
+                         style="display: flex; flex-direction: row; align-items: center; height: auto;">
+            <ng-template [ngIf]="user.username !== (authenticationService.currentUser | async).username"
+                         [ngIfElse]="ownUser">
+              <mat-icon>person_outlined</mat-icon>
+              <p matLine style="margin-left: 0.5em;">{{user.username}}</p>
+              <button *ngIf="(websocketService.currentSession | async).isOwn" mat-icon-button color="warn"
+                      style="margin-left: 1em;"
+                      (click)="websocketService.kickMember(user)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </ng-template>
+            <ng-template #ownUser>
+              <mat-icon>person</mat-icon>
+              <p style="font-weight: bold; margin-left: 0.5em;" matLine>You</p>
+            </ng-template>
+          </mat-list-item>
+        </mat-list>
+        <ng-template #startSession>
+          START SESSION
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="(websocketService.currentSession | async)" class="mat-elevation-z3" style="margin-left: 0.5em;">
+      <mat-card-content>
+        <button mat-raised-button color="warn" (click)="websocketService.leaveSession()" style="width: 100%;">
+          {{(websocketService.currentSession | async).isOwn ? 'Close Session' : 'Leave Session'}}
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

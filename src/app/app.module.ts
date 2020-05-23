@@ -32,6 +32,8 @@ import {MatSliderModule} from '@angular/material/slider';
 import {InvitationListComponent} from './invitation-list/invitation-list.component';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -58,7 +60,9 @@ import {MatBadgeModule} from '@angular/material/badge';
     FormsModule,
     MatLineModule,
     MatListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatGridListModule,
+    FlexLayoutModule
   ],
   declarations: [
     AppComponent,

@@ -7,6 +7,7 @@ import {MatSelect} from '@angular/material/select';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {debounceTime, pairwise, startWith} from 'rxjs/operators';
 import {InputfieldState, User} from '@app/_models';
+import {AuthenticationService} from '@app/_services';
 
 interface Fruit {
   value: string;
@@ -44,7 +45,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
 
-  constructor(private formBuilder: FormBuilder, private websocketService: WebsocketService) {
+  constructor(private formBuilder: FormBuilder, private websocketService: WebsocketService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
