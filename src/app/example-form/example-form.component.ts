@@ -45,8 +45,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
 
-  constructor(private formBuilder: FormBuilder, private websocketService: WebsocketService,
-              private authenticationService: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder, public websocketService: WebsocketService,
+              public authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
