@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Group, InputfieldState, Invitation, User} from '@app/_models';
+import {Group, InputfieldState, Invitation, Session, User} from '@app/_models';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
@@ -12,8 +12,14 @@ import {Router} from '@angular/router';
 export class WebsocketService {
   private socket;
 
+  private currentSessionSubject: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+  public readonly currentSession: Observable<Session> = this.currentSessionSubject.asObservable();
+
   private invitationsSubject: BehaviorSubject<Invitation[]> = new BehaviorSubject<Invitation[]>([]);
   public readonly invitations: Observable<Invitation[]> = this.invitationsSubject.asObservable();
+
+  private sessionMembersSubject: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+  public readonly sessionMembers: Observable<User[]> = this.sessionMembersSubject.asObservable();
 
   constructor(private snackBar: MatSnackBar, private router: Router) {
   }
@@ -40,10 +46,21 @@ export class WebsocketService {
       this.invitationsSubject.next(invitations);
     });
     this.socket.on('session-started', () => {
+      this.currentSessionSubject.next({isOwn: true, host: null});
       this.router.navigate(['/example-form']);
     });
-    this.socket.on('session-joined', () => {
+    this.socket.on('session-joined', (data: any) => {
+      this.currentSessionSubject.next({isOwn: false, host: data.host});
       this.router.navigate(['/example-form']);
+    });
+    this.socket.on('session-left', () => {
+      this.router.navigate(['/']);
+      this.currentSessionSubject.next(null);
+      this.sessionMembersSubject.next([]);
+    });
+    this.socket.on('member-list-update', (data: any) => {
+      const members: User[] = data.users;
+      this.sessionMembersSubject.next(members);
     });
   }
 
@@ -71,6 +88,16 @@ export class WebsocketService {
     this.socket.emit('join-session', {
       host
     });
+  }
+
+  kickMember(member: User) {
+    this.socket.emit('kick-member', {
+      member
+    });
+  }
+
+  leaveSession() {
+    this.socket.emit('leave-session', {});
   }
 
   sendInputfieldInteraction(fieldId: string, changed: boolean, oldValue: string, newValue: string, selectionStart: number,
