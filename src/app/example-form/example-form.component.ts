@@ -25,6 +25,7 @@ interface Car {
 })
 export class ExampleFormComponent implements OnInit, AfterViewInit {
   exampleForm: FormGroup;
+  hslColor: string;
 
   @ViewChildren('synchronizedField')
   synchronizedFields: QueryList<any>;
@@ -61,6 +62,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     // Typed the startWith value to not implicitly use deprecated signature: https://github.com/ReactiveX/rxjs/issues/4772
     this.exampleForm.valueChanges.pipe(debounceTime(100), startWith(this.exampleForm.value as object), pairwise())
       .subscribe(([prev, next]) => this.handleChanges(prev, next));
+
+    this.generateRandomColor();
   }
 
   ngAfterViewInit(): void {
@@ -166,12 +169,12 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   // Generates a random color using HSL (hue, saturation, lightness)
   // Only hue is generated randomly.
   // saturation = 100%, lightness = 80% always.
-  generateRandomColor() : string {
+  generateRandomColor() : void {
     let min : number = 0;
     let max : number = 360;
     // Min and max are included!
     let hValue : number = Math.floor(Math.random() * (max - min + 1) + min);
-    return "hsl(" + hValue + ", 100%, 80%)";
+    this.hslColor = "hsl(" + hValue + ", 100%, 80%)";
   }
 
 }
