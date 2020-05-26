@@ -25,6 +25,7 @@ interface Car {
 })
 export class ExampleFormComponent implements OnInit, AfterViewInit {
   exampleForm: FormGroup;
+  // TODO: #1 Unique for each user...
   hslColor: string;
 
   @ViewChildren('synchronizedField')
@@ -63,6 +64,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     this.exampleForm.valueChanges.pipe(debounceTime(100), startWith(this.exampleForm.value as object), pairwise())
       .subscribe(([prev, next]) => this.handleChanges(prev, next));
 
+    // TODO: #1 Actually this should be called for each user (=> unique color assignment)
+    // TODO: #2 It should also be called only for a focused input field and not for any state
     this.generateRandomColor();
   }
 
