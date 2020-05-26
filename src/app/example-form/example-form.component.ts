@@ -173,11 +173,11 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   // Only hue is generated randomly.
   // saturation = 100%, lightness = 80% always.
   generateRandomColor() : void {
-    let min : number = 0;
-    let max : number = 360;
+    const min = 0;
+    const max = 360;
     // Min and max are included!
-    let hValue : number = Math.floor(Math.random() * (max - min + 1) + min);
-    this.hslColor = "hsl(" + hValue + ", 100%, 80%)";
+    const hValue = Math.floor(Math.random() * (max - min + 1) + min);
+    this.hslColor = 'hsl(' + hValue + ', 100%, 80%)';
   }
 
 }
