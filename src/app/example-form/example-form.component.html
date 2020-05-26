@@ -10,7 +10,7 @@
         <form [formGroup]="exampleForm">
           <p>Please enter the name of your favourite city:</p>
           <mat-form-field>
-            <input matInput placeholder="City name" formControlName="favouriteCity" #synchronizedField/>
+            <input matInput placeholder="City name" formControlName="favouriteCity" [ngStyle]="{'backgroundColor' : generateRandomColor()}" #synchronizedField/>
           </mat-form-field>
 
           <p>Pick your favorite fruit:</p>
