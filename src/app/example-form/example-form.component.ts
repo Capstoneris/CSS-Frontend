@@ -51,7 +51,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   ];
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
-  private fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
+  // TODO: Actually should not be public, but it is a hack for passing CI-checks
+  public fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
 
   constructor(private formBuilder: FormBuilder, public websocketService: WebsocketService,
               public authenticationService: AuthenticationService) {
@@ -185,11 +186,18 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     this.fieldLinks.set(fieldId, element);
   }
 
-  // Generates a random color using HSL (hue, saturation, lightness)
-  // Only hue is generated randomly.
-  // saturation = 100%, lightness = 80% always.
+  // Generates a unique color based on the username of a giver user
   getColorForUser(user: User): string {
-    return 'hsl(' + 200 + ', 100%, 80%)';
+    // Generate color based on username
+    let hash : number = 0;
+    for (let i = 0; i < user.username.length; i++) {
+      hash = user.username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour : string = '#';
+    for (let i = 0; i < 3; i++) {
+      let value = (hash >> (i * 8)) & 0xFF;
+      colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
   }
-
 }
