@@ -6,7 +6,7 @@ import {MatSlider} from '@angular/material/slider';
 import {MatSelect} from '@angular/material/select';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {debounceTime, pairwise, startWith} from 'rxjs/operators';
-import {InputfieldSelection, InputfieldState, User} from '@app/_models';
+import {InputfieldState, User} from '@app/_models';
 import {AuthenticationService} from '@app/_services';
 
 interface Fruit {
@@ -199,7 +199,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       color += ('00' + value.toString(16)).substr(-2);
     }
 
-    console.log('color=' + color);
     return color;
   }
 }
