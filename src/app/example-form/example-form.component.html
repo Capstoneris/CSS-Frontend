@@ -9,11 +9,11 @@
       <mat-card-content>
         <form [formGroup]="exampleForm">
           <p>Please enter the name of your favourite city:</p>
-          <mat-form-field >
+          <mat-form-field>
             <input matInput placeholder="City name" formControlName="favouriteCity"
-                   [ngStyle]="{'border' : fieldTypingIndicators.has('favouriteCity') ? ('2px solid ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none',
-                               'boxShadow' : fieldTypingIndicators.has('favouriteCity') ? ('0px 0px 5px ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none'
-                              }" #synchronizedField/>
+                   [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteCity') ? getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser) : 'transparent',
+                   'box-shadow': fieldTypingIndicators.has('favouriteCity') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none'}"
+                   #synchronizedField/>
           </mat-form-field>
 
           <p>Pick your favorite fruit:</p>
@@ -58,8 +58,8 @@
                          style="display: flex; flex-direction: row; align-items: center; height: auto;">
             <ng-template [ngIf]="user.username !== (authenticationService.currentUser | async).username"
                          [ngIfElse]="ownUser">
-              <mat-icon>person_outlined</mat-icon>
-              <p matLine style="margin-left: 0.5em;">{{user.username}}</p>
+              <mat-icon [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">person_outlined</mat-icon>
+              <p matLine style="margin-left: 1.3em;">{{user.username}}</p>
               <button *ngIf="(websocketService.currentSession | async).isOwn" mat-icon-button color="warn"
                       style="margin-left: 1em;"
                       (click)="websocketService.kickMember(user)">
@@ -67,8 +67,8 @@
               </button>
             </ng-template>
             <ng-template #ownUser>
-              <mat-icon>person</mat-icon>
-              <p style="font-weight: bold; margin-left: 0.5em;" matLine>You</p>
+              <mat-icon [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">person</mat-icon>
+              <p style="font-weight: bold; margin-left: 1.3em;" matLine>You</p>
             </ng-template>
           </mat-list-item>
         </mat-list>

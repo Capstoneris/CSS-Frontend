@@ -24,7 +24,7 @@ interface FieldTypingIndicator {
   resetTimeout: any;
 }
 
-const TYPING_INDICATOR_RESET_TIMEOUT = 2000;
+const TYPING_INDICATOR_RESET_TIMEOUT = 5000;
 
 @Component({
   templateUrl: './example-form.component.html',
@@ -50,9 +50,9 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     {value: 'mercedes', viewValue: 'Mercedes Benz'},
   ];
 
+  fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
+
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
-  // TODO: Actually should not be public, but it is a hack for passing CI-checks
-  public fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
 
   constructor(private formBuilder: FormBuilder, public websocketService: WebsocketService,
               public authenticationService: AuthenticationService) {
@@ -199,6 +199,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       color += ('00' + value.toString(16)).substr(-2);
     }
 
-    return color;
+    return color + '90';
   }
 }
