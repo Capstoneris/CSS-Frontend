@@ -9,8 +9,11 @@
       <mat-card-content>
         <form [formGroup]="exampleForm">
           <p>Please enter the name of your favourite city:</p>
-          <mat-form-field [ngStyle]="{'backgroundColor' : fieldTypingIndicators.has('favouriteCity') ? getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser) : 'none'}">
-            <input matInput placeholder="City name" formControlName="favouriteCity" #synchronizedField/>
+          <mat-form-field >
+            <input matInput placeholder="City name" formControlName="favouriteCity"
+                   [ngStyle]="{'border' : fieldTypingIndicators.has('favouriteCity') ? ('2px solid ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none',
+                               'boxShadow' : fieldTypingIndicators.has('favouriteCity') ? ('0px 0px 5px ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none'
+                              }" #synchronizedField/>
           </mat-form-field>
 
           <p>Pick your favorite fruit:</p>

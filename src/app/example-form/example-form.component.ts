@@ -189,15 +189,17 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   // Generates a unique color based on the username of a giver user
   getColorForUser(user: User): string {
     // Generate color based on username
-    let hash : number = 0;
+    let hash = 0;
     for (let i = 0; i < user.username.length; i++) {
       hash = user.username.charCodeAt(i) + ((hash << 5) - hash);
     }
-    let colour : string = '#';
+    let color = '#';
     for (let i = 0; i < 3; i++) {
-      let value = (hash >> (i * 8)) & 0xFF;
-      colour += ('00' + value.toString(16)).substr(-2);
+      const value = (hash >> (i * 8)) & 0xFF;
+      color += ('00' + value.toString(16)).substr(-2);
     }
-    return colour;
+
+    console.log("color=" + color);
+    return color;
   }
 }
