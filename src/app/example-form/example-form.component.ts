@@ -6,7 +6,7 @@ import {MatSlider} from '@angular/material/slider';
 import {MatSelect} from '@angular/material/select';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {debounceTime, pairwise, startWith} from 'rxjs/operators';
-import {InputfieldState, User} from '@app/_models';
+import {InputfieldSelection, InputfieldState, User} from '@app/_models';
 import {AuthenticationService} from '@app/_services';
 
 interface Fruit {
@@ -19,14 +19,19 @@ interface Car {
   viewValue: string;
 }
 
+interface FieldTypingIndicator {
+  typingUser: User;
+  resetTimeout: any;
+}
+
+const TYPING_INDICATOR_RESET_TIMEOUT = 2000;
+
 @Component({
   templateUrl: './example-form.component.html',
   styleUrls: ['./example-form.component.scss']
 })
 export class ExampleFormComponent implements OnInit, AfterViewInit {
   exampleForm: FormGroup;
-  // TODO: #1 Unique for each user...
-  hslColor: string;
 
   @ViewChildren('synchronizedField')
   synchronizedFields: QueryList<any>;
@@ -46,6 +51,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   ];
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
+  private fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
 
   constructor(private formBuilder: FormBuilder, public websocketService: WebsocketService,
               public authenticationService: AuthenticationService) {
@@ -63,10 +69,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     // Typed the startWith value to not implicitly use deprecated signature: https://github.com/ReactiveX/rxjs/issues/4772
     this.exampleForm.valueChanges.pipe(debounceTime(100), startWith(this.exampleForm.value as object), pairwise())
       .subscribe(([prev, next]) => this.handleChanges(prev, next));
-
-    // TODO: #1 Actually this should be called for each user (=> unique color assignment)
-    // TODO: #2 It should also be called only for a focused input field and not for any state
-    this.generateRandomColor();
   }
 
   ngAfterViewInit(): void {
@@ -112,6 +114,20 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
   applyChanges(byUser: User, state: InputfieldState) {
     const fieldId = state.fieldId;
+
+    // Clear previous field selection
+    if (this.fieldTypingIndicators.has(fieldId)) {
+      window.clearTimeout(this.fieldTypingIndicators.get(fieldId).resetTimeout);
+    }
+
+    // Set new field selection
+    const fieldTypingIndicator = {
+      typingUser: byUser, resetTimeout: window.setTimeout(() => {
+        this.fieldTypingIndicators.delete(fieldId);
+        console.log(this.fieldTypingIndicators);
+      }, TYPING_INDICATOR_RESET_TIMEOUT)
+    };
+    this.fieldTypingIndicators.set(fieldId, fieldTypingIndicator);
 
     // Analyze field value type
     const fieldType = typeof this.exampleForm.value[fieldId];
@@ -172,12 +188,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   // Generates a random color using HSL (hue, saturation, lightness)
   // Only hue is generated randomly.
   // saturation = 100%, lightness = 80% always.
-  generateRandomColor() : void {
-    const min = 0;
-    const max = 360;
-    // Min and max are included!
-    const hValue = Math.floor(Math.random() * (max - min + 1) + min);
-    this.hslColor = 'hsl(' + hValue + ', 100%, 80%)';
+  getColorForUser(user: User): string {
+    return 'hsl(' + 200 + ', 100%, 80%)';
   }
 
 }
