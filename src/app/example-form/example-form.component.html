@@ -10,7 +10,7 @@
         <form [formGroup]="exampleForm">
           <p>Please enter the name of your favourite city:</p>
           <mat-form-field>
-            <input matInput placeholder="City name" formControlName="favouriteCity"
+            <input matInput placeholder="City name" formControlName="favouriteCity" class="with-typing-indicator"
                    [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteCity') ? getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser) : 'transparent',
                    'box-shadow': fieldTypingIndicators.has('favouriteCity') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteCity').typingUser)) : 'none'}"
                    #synchronizedField/>
@@ -19,6 +19,9 @@
           <p>Pick your favorite fruit:</p>
           <mat-radio-group formControlName="favouriteFruit" style="margin: -1em -1em 1.25em;">
             <mat-radio-button *ngFor="let fruit of fruitChoices" [value]="fruit.value" style="margin: 1em;"
+                              class="with-typing-indicator"
+                              [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteFruit') ? getColorForUser(fieldTypingIndicators.get('favouriteFruit').typingUser) : 'transparent',
+                              'box-shadow': fieldTypingIndicators.has('favouriteFruit') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteFruit').typingUser)) : 'none'}"
                               #synchronizedField>
               {{fruit.viewValue}}
             </mat-radio-button>
@@ -26,7 +29,10 @@
 
           <p>What's your favourite car?</p>
           <mat-form-field>
-            <mat-select placeholder="Car brand" formControlName="favouriteCar" #synchronizedField>
+            <mat-select placeholder="Car brand" formControlName="favouriteCar" class="with-typing-indicator"
+                        [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteCar') ? getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser) : 'transparent',
+                        'box-shadow': fieldTypingIndicators.has('favouriteCar') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser)) : 'none'}"
+                        #synchronizedField>
               <mat-option>None</mat-option>
               <mat-option *ngFor="let car of carChoices" [value]="car.value">
                 {{car.viewValue}}
@@ -35,12 +41,16 @@
           </mat-form-field>
 
           <p>How are you?</p>
-          <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;" #synchronizedField>I'm feeling
+          <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;" class="with-typing-indicator"
+                        [ngStyle]="{'background-color': fieldTypingIndicators.has('imFeelingHappy') ? getColorForUser(fieldTypingIndicators.get('imFeelingHappy').typingUser) : 'transparent',
+                        'box-shadow': fieldTypingIndicators.has('imFeelingHappy') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('imFeelingHappy').typingUser)) : 'none'}" #synchronizedField>I'm feeling
             happy!
           </mat-checkbox>
 
           <p>Happiness:</p>
-          <mat-slider min="1" max="100" step="1" formControlName="happiness" #synchronizedField></mat-slider>
+          <mat-slider min="1" max="100" step="1" formControlName="happiness" class="with-typing-indicator"
+                      [ngStyle]="{'background-color': fieldTypingIndicators.has('happiness') ? getColorForUser(fieldTypingIndicators.get('happiness').typingUser) : 'transparent',
+                        'box-shadow': fieldTypingIndicators.has('happiness') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('happiness').typingUser)) : 'none'}" #synchronizedField></mat-slider>
 
         </form>
       </mat-card-content>
@@ -58,7 +68,10 @@
                          style="display: flex; flex-direction: row; align-items: center; height: auto;">
             <ng-template [ngIf]="user.username !== (authenticationService.currentUser | async).username"
                          [ngIfElse]="ownUser">
-              <mat-icon [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">person_outlined</mat-icon>
+              <mat-icon
+                [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
+                person_outlined
+              </mat-icon>
               <p matLine style="margin-left: 1.3em;">{{user.username}}</p>
               <button *ngIf="(websocketService.currentSession | async).isOwn" mat-icon-button color="warn"
                       style="margin-left: 1em;"
@@ -67,7 +80,10 @@
               </button>
             </ng-template>
             <ng-template #ownUser>
-              <mat-icon [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">person</mat-icon>
+              <mat-icon
+                [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
+                person
+              </mat-icon>
               <p style="font-weight: bold; margin-left: 1.3em;" matLine>You</p>
             </ng-template>
           </mat-list-item>

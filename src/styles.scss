@@ -29,3 +29,7 @@ body {
 .mat-card-header-text {
   margin: 0 !important;
 }
+
+.with-typing-indicator {
+  transition: background-color .7s ease-out, box-shadow .7s ease-out;
+}

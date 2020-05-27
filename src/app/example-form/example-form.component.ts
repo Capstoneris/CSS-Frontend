@@ -199,6 +199,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       color += ('00' + value.toString(16)).substr(-2);
     }
 
-    return color + '90';
+    return color + '70';
   }
 }
