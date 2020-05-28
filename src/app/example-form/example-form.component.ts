@@ -105,6 +105,12 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
         continue;
       }
 
+      // Clear typing indicator when the user is typing itself
+      if (this.fieldTypingIndicators.has(fieldId)) {
+        window.clearTimeout(this.fieldTypingIndicators.get(fieldId).resetTimeout);
+        this.fieldTypingIndicators.delete(fieldId);
+      }
+
       // Get current selection, if supported
       let selectionStart = 0;
       let selectionEnd = 0;
