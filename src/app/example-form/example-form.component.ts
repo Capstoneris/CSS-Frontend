@@ -24,7 +24,7 @@ interface FieldTypingIndicator {
   resetTimeout: any;
 }
 
-const TYPING_INDICATOR_RESET_TIMEOUT = 5000;
+const TYPING_INDICATOR_RESET_TIMEOUT = 2000;
 
 @Component({
   templateUrl: './example-form.component.html',
@@ -53,6 +53,9 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
+
+  // When handling a local change, this overrides the previous field value in case it originated from a foreign edit.
+  private fieldPrevOverrides: Map<string, any> = new Map<string, any>();
 
   constructor(private formBuilder: FormBuilder, public websocketService: WebsocketService,
               public authenticationService: AuthenticationService) {
@@ -87,7 +90,14 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
         continue;
       }
 
-      const prevValue = prev[fieldId];
+      let prevValue;
+      if (this.fieldPrevOverrides.has(fieldId)) {
+        prevValue = this.fieldPrevOverrides.get(fieldId);
+        this.fieldPrevOverrides.delete(fieldId);
+      } else {
+        prevValue = prev[fieldId];
+      }
+
       const nextValue = next[fieldId];
 
       // Value changed?
@@ -154,6 +164,9 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     this.exampleForm.patchValue({
       [fieldId]: value
     }, {emitEvent: false});
+
+    // Remember this as foreign previous value
+    this.fieldPrevOverrides.set(fieldId, value);
   }
 
   // The stuff below is quite hacky and ugly, but it works, so ...
