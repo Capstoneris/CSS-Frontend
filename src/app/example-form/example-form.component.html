@@ -68,7 +68,7 @@
                          style="display: flex; flex-direction: row; align-items: center; height: auto;">
             <ng-template [ngIf]="user.username !== (authenticationService.currentUser | async).username"
                          [ngIfElse]="ownUser">
-              <mat-icon
+              <mat-icon style="border-radius: 100%;"
                 [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
                 person_outlined
               </mat-icon>
@@ -80,7 +80,7 @@
               </button>
             </ng-template>
             <ng-template #ownUser>
-              <mat-icon
+              <mat-icon style="border-radius: 100%;"
                 [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
                 person
               </mat-icon>

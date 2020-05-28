@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+// Custom Capturis theme (not a perfect match, but good enough)
+$capturis-app-primary: mat-palette($mat-green, 800);
+$capturis-app-accent:  mat-palette($mat-teal, 500, A100, A400);
+$capturis-app-warn:    mat-palette($mat-deep-orange);
+
+$capturis-app-theme: mat-light-theme($capturis-app-primary, $capturis-app-accent, $capturis-app-warn);
+
+@include angular-material-theme($capturis-app-theme);
