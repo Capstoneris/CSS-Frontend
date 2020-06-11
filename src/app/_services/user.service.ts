@@ -12,4 +12,12 @@ export class UserService {
   getAll() {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
+
+  public sendGetUsersRequest(){
+    return this.http.get(`${environment.apiUrl}/users`);
+  }
+
+  public sendGetGroupsForUserRequest(){
+    return this.http.get(`${environment.apiUrl}/users/in-my-group`);
+  }
 }

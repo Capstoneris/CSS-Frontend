@@ -9,17 +9,9 @@ import {Group, User} from '@app/_models';
 export class HomeComponent implements OnInit {
   startSessionForm: FormGroup;
 
-  users: User[] = [
-    {id: 1, username: 'Herbert'},
-    {id: 2, username: 'Simon'},
-    {id: 3, username: 'Hubertus'},
-    {id: 4, username: 'Amir'}
-  ];
+  users: User[];
 
-  groupChoices: Group[] = [
-    {id: 1, title: 'Admins'},
-    {id: 2, title: 'Walmart'}
-  ];
+  groupChoices: Group[];
 
   constructor(private userService: UserService,
               private websocketService: WebsocketService,
@@ -35,6 +27,17 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
+    // TODO: still not fully functioning in the backend
+    this.userService.sendGetUsersRequest().subscribe((data: any[])=>{
+      console.log(data);
+      this.users = data;
+    })
+
+    // TODO: still not fully functioning in the backend
+    this.userService.sendGetGroupsForUserRequest().subscribe((data: any[])=>{
+      console.log(data);
+      this.groupChoices = data;
+    })
     // this.loading = true;
     // this.userService.getAll().pipe(first()).subscribe(users => {
     //   this.loading = false;
