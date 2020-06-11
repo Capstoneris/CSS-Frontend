@@ -1,4 +1,4 @@
-﻿import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '@app/_services';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -31,13 +31,13 @@ export class HomeComponent implements OnInit {
     this.userService.sendGetUsersRequest().subscribe((data: any[])=>{
       console.log(data);
       this.users = data;
-    })
+    });
 
     // TODO: still not fully functioning in the backend
     this.userService.sendGetGroupsForUserRequest().subscribe((data: any[])=>{
       console.log(data);
       this.groupChoices = data;
-    })
+    });
     // this.loading = true;
     // this.userService.getAll().pipe(first()).subscribe(users => {
     //   this.loading = false;
