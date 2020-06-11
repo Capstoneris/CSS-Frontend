@@ -27,22 +27,17 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    // TODO: still not fully functioning in the backend
-    this.userService.sendGetUsersRequest().subscribe((data: any[])=>{
-      console.log(data);
-      this.users = data;
-    });
-
-    // TODO: still not fully functioning in the backend
-    this.userService.sendGetGroupsForUserRequest().subscribe((data: any[])=>{
-      console.log(data);
+    // FIXME: BACKEND: org.postgresql.util.PSQLException: ResultSet not positioned properly, perhaps you need to call next.
+    this.userService.getGroupsForUser().subscribe((data)=>{
+      console.log(data.toString());
       this.groupChoices = data;
     });
-    // this.loading = true;
-    // this.userService.getAll().pipe(first()).subscribe(users => {
-    //   this.loading = false;
-    //   this.users = users;
-    // });
+
+    // FIXME: BACKEND: org.postgresql.util.PSQLException: ResultSet not positioned properly, perhaps you need to call next.
+    this.userService.getAllUsers().subscribe((data)=>{
+      console.log(data.toString());
+      this.users = data;
+    });
   }
 
   startSession() {

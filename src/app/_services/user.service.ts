@@ -2,22 +2,21 @@
 import {HttpClient} from '@angular/common/http';
 
 import {environment} from '@environments/environment';
-import {User} from '@app/_models';
+import {User, Group} from '@app/_models';
+import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
+  users: User[];
+
   constructor(private http: HttpClient) {
   }
 
-  getAll() {
+  public getAllUsers() : Observable<User[]> {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
 
-  public sendGetUsersRequest(){
-    return this.http.get(`${environment.apiUrl}/users`);
-  }
-
-  public sendGetGroupsForUserRequest(){
-    return this.http.get(`${environment.apiUrl}/users/in-my-group`);
+  public getGroupsForUser()  : Observable<Group[]> {
+    return this.http.get<Group[]>(`${environment.apiUrl}/users/in-my-group`);
   }
 }
