@@ -1,4 +1,4 @@
-﻿import {User} from "@app/_models/user";
+import {User} from '@app/_models/user';
 
 export class ChatMessage {
   timestamp: number;
