@@ -34,6 +34,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {PickerModule} from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatListModule,
     MatBadgeModule,
     MatGridListModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    PickerModule
   ],
   declarations: [
     AppComponent,

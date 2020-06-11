@@ -33,6 +33,8 @@ const TYPING_INDICATOR_RESET_TIMEOUT = 2000;
 export class ExampleFormComponent implements OnInit, AfterViewInit {
   exampleForm: FormGroup;
 
+  chatForm: FormGroup;
+
   @ViewChildren('synchronizedField')
   synchronizedFields: QueryList<any>;
 
@@ -68,6 +70,10 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       favouriteCar: '',
       imFeelingHappy: false,
       happiness: 50
+    });
+
+    this.chatForm = this.formBuilder.group({
+      message: ''
     });
 
     // Typed the startWith value to not implicitly use deprecated signature: https://github.com/ReactiveX/rxjs/issues/4772
@@ -173,6 +179,19 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
     // Remember this as foreign previous value
     this.fieldPrevOverrides.set(fieldId, value);
+  }
+
+  addEmoji($event) {
+    const messageField = this.chatForm.get('message');
+    messageField.patchValue((messageField.value || '') + $event.emoji.native);
+  }
+
+  sendChatMessage() {
+    const message = this.chatForm.value.message;
+    if(!message)
+      return;
+    this.websocketService.sendChatMessage(this.authenticationService.currentUserValue, message);
+    this.chatForm.reset();
   }
 
   // The stuff below is quite hacky and ugly, but it works, so ...
