@@ -43,14 +43,16 @@
           <p>How are you?</p>
           <mat-checkbox formControlName="imFeelingHappy" style="margin-bottom: 1.25em;" class="with-typing-indicator"
                         [ngStyle]="{'background-color': fieldTypingIndicators.has('imFeelingHappy') ? getColorForUser(fieldTypingIndicators.get('imFeelingHappy').typingUser) : 'transparent',
-                        'box-shadow': fieldTypingIndicators.has('imFeelingHappy') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('imFeelingHappy').typingUser)) : 'none'}" #synchronizedField>I'm feeling
+                        'box-shadow': fieldTypingIndicators.has('imFeelingHappy') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('imFeelingHappy').typingUser)) : 'none'}"
+                        #synchronizedField>I'm feeling
             happy!
           </mat-checkbox>
 
           <p>Happiness:</p>
           <mat-slider min="1" max="100" step="1" formControlName="happiness" class="with-typing-indicator"
                       [ngStyle]="{'background-color': fieldTypingIndicators.has('happiness') ? getColorForUser(fieldTypingIndicators.get('happiness').typingUser) : 'transparent',
-                        'box-shadow': fieldTypingIndicators.has('happiness') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('happiness').typingUser)) : 'none'}" #synchronizedField></mat-slider>
+                        'box-shadow': fieldTypingIndicators.has('happiness') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('happiness').typingUser)) : 'none'}"
+                      #synchronizedField></mat-slider>
 
         </form>
       </mat-card-content>
@@ -69,7 +71,7 @@
             <ng-template [ngIf]="user.username !== (authenticationService.currentUser | async).username"
                          [ngIfElse]="ownUser">
               <mat-icon style="border-radius: 100%;"
-                [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
+                        [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
                 person_outlined
               </mat-icon>
               <p matLine style="margin-left: 1.3em;">{{user.username}}</p>
@@ -81,7 +83,7 @@
             </ng-template>
             <ng-template #ownUser>
               <mat-icon style="border-radius: 100%;"
-                [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
+                        [ngStyle]="{'background-color': getColorForUser(user), 'box-shadow': '0 0 3px 4px ' + getColorForUser(user)}">
                 person
               </mat-icon>
               <p style="font-weight: bold; margin-left: 1.3em;" matLine>You</p>
@@ -94,6 +96,46 @@
       </mat-card-content>
     </mat-card>
 
+    <mat-card class="mat-elevation-z3" style="margin-left: 0.5em;" *ngIf="websocketService.currentSession | async">
+      <mat-card-header>
+        <mat-card-title>Chat</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div>
+          <mat-list
+            style="padding: 0; overflow: hidden auto; max-height: 300px; display: flex; flex-direction: column-reverse;">
+            <mat-list-item *ngFor="let message of (websocketService.sessionChatMessages | async).reverse()"
+                           style="height: auto; margin-top: 0.8em;">
+              <div style="display: flex; flex-direction: column;">
+                <p
+                  style="font-weight: bold; margin: 0;">{{message.sentBy.username === (authenticationService.currentUser | async).username ? 'You' : message.sentBy.username}}</p>
+                <p style="margin: 0;">{{message.message}}</p>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <form [formGroup]="chatForm" (ngSubmit)="sendChatMessage()">
+            <div style="display: flex; flex-direction: row; margin-top: 1em;">
+              <mat-form-field>
+                <input matInput placeholder="Enter message..." formControlName="message"
+                       (keydown.enter)="sendChatMessage(); $event.preventDefault(); $event.stopPropagation();"/>
+              </mat-form-field>
+              <button mat-icon-button [matMenuTriggerFor]="emojiMenu" (click)="$event.preventDefault()">
+                <mat-icon>insert_emoticon</mat-icon>
+              </button>
+              <button mat-icon-button>
+                <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </form>
+        </div>
+        <mat-menu class="popover-menu" #emojiMenu="matMenu">
+          <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+            <emoji-mart (emojiClick)="addEmoji($event)"></emoji-mart>
+          </div>
+        </mat-menu>
+      </mat-card-content>
+    </mat-card>
+
     <mat-card *ngIf="(websocketService.currentSession | async)" class="mat-elevation-z3" style="margin-left: 0.5em;">
       <mat-card-content>
         <button mat-raised-button color="warn" (click)="websocketService.leaveSession()" style="width: 100%;">
@@ -102,5 +144,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-
 </div>
