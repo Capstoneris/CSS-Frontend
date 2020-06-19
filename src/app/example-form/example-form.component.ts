@@ -6,7 +6,7 @@ import {MatSlider} from '@angular/material/slider';
 import {MatSelect} from '@angular/material/select';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {debounceTime, pairwise, startWith} from 'rxjs/operators';
-import {InputfieldState, User} from '@app/_models';
+import {InputfieldSelection, InputfieldState, User} from '@app/_models';
 import {AuthenticationService} from '@app/_services';
 
 interface Fruit {
@@ -52,6 +52,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     {value: 'mercedes', viewValue: 'Mercedes Benz'},
   ];
 
+  fieldSelections: Map<string, InputfieldSelection[]> = new Map<string, InputfieldSelection[]>();
   fieldTypingIndicators: Map<string, FieldTypingIndicator> = new Map<string, FieldTypingIndicator>();
 
   private fieldLinks: Map<string, HTMLElement> = new Map<string, HTMLElement>();
@@ -138,16 +139,18 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   applyChanges(byUser: User, state: InputfieldState) {
     const fieldId = state.fieldId;
 
-    // Clear previous field selection
+    // Set field selection
+    this.fieldSelections.set(fieldId, state.selections);
+
+    // Clear previous typing indicator
     if (this.fieldTypingIndicators.has(fieldId)) {
       window.clearTimeout(this.fieldTypingIndicators.get(fieldId).resetTimeout);
     }
 
-    // Set new field selection
+    // Set new typing indicator
     const fieldTypingIndicator = {
       typingUser: byUser, resetTimeout: window.setTimeout(() => {
         this.fieldTypingIndicators.delete(fieldId);
-        console.log(this.fieldTypingIndicators);
       }, TYPING_INDICATOR_RESET_TIMEOUT)
     };
     this.fieldTypingIndicators.set(fieldId, fieldTypingIndicator);
@@ -188,7 +191,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
   sendChatMessage() {
     const message = this.chatForm.value.message;
-    if(!message)
+    if (!message)
       return;
     this.websocketService.sendChatMessage(this.authenticationService.currentUserValue, message);
     this.chatForm.reset();
@@ -203,17 +206,17 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     if (field instanceof ElementRef && field.nativeElement instanceof HTMLInputElement) {
       element = field.nativeElement;
       fieldId = element.getAttribute('formControlName');
-      // input.addEventListener('mouseup', e => {
-      //   this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, input.selectionStart, input.selectionEnd);
-      // });
+      element.addEventListener('mouseup', e => {
+        this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, element.selectionStart, element.selectionEnd);
+      });
     } else if (field instanceof MatRadioButton) {
-      return; // TODO
+      return; // Not needed yet
     } else if (field instanceof MatSelect) {
-      return; // TODO
+      return; // Not needed yet
     } else if (field instanceof MatCheckbox) {
-      return; // TODO
+      return; // Not needed yet
     } else if (field instanceof MatSlider) {
-      return; // TODO
+      return; // Not needed yet
     } else {
       console.error('Unsupported field:');
       console.error(field);
@@ -238,5 +241,14 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     }
 
     return color + '70';
+  }
+
+  getFormFieldHint(fieldId: string) {
+    if (!this.fieldSelections.has(fieldId))
+      return null;
+    const selections = this.fieldSelections.get(fieldId);
+    if (!selections || !selections.length)
+      return null;
+    return selections.map(s => s.user.username).join(', ');
   }
 }
