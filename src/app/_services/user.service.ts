@@ -16,6 +16,7 @@ export class UserService {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
 
+  // FIXME: Cross-Origin... correcting url?
   public getGroupsForUser()  : Observable<Group[]> {
     return this.http.get<Group[]>(`${environment.apiUrl}/users/in-my-group`);
   }

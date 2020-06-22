@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+﻿import {Component, OnInit} from '@angular/core';
 import {UserService} from '@app/_services';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -27,17 +27,19 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    // FIXME: BACKEND: org.postgresql.util.PSQLException: ResultSet not positioned properly, perhaps you need to call next.
-    this.userService.getGroupsForUser().subscribe((data)=>{
-      console.log(data.toString());
-      this.groupChoices = data;
-    });
-
-    // FIXME: BACKEND: org.postgresql.util.PSQLException: ResultSet not positioned properly, perhaps you need to call next.
+    // FIXME: users does not fill up... why?
     this.userService.getAllUsers().subscribe((data)=>{
       console.log(data.toString());
       this.users = data;
     });
+
+    console.log('USERS AFTER GET-REQ:' + this.users.toString());
+
+    // FIXME: Cross-Origin... correcting url?
+    // this.userService.getGroupsForUser().subscribe((data)=>{
+    //   console.log(data.toString());
+    //   this.groupChoices = data;
+    // });
   }
 
   startSession() {
