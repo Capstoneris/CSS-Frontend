@@ -27,18 +27,13 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    // FIXME: users does not fill up... why?
     this.userService.getAllUsers().subscribe((data)=>{
       this.users = data;
     });
 
-    console.log('USERS AFTER GET-REQ:' + this.users.toString());
-
-    // FIXME: Cross-Origin... correcting url?
-    // this.userService.getGroupsForUser().subscribe((data)=>{
-    //   console.log(data.toString());
-    //   this.groupChoices = data;
-    // });
+    this.userService.getGroupsForUser().subscribe((data)=>{
+      this.groupChoices = data;
+    });
   }
 
   startSession() {
