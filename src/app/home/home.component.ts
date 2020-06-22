@@ -9,9 +9,9 @@ import {Group, User} from '@app/_models';
 export class HomeComponent implements OnInit {
   startSessionForm: FormGroup;
 
-  users: User[];
+  users: User[] = [];
 
-  groupChoices: Group[];
+  groupChoices: Group[] = [];
 
   constructor(private userService: UserService,
               private websocketService: WebsocketService,
@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
 
     // FIXME: users does not fill up... why?
     this.userService.getAllUsers().subscribe((data)=>{
-      console.log(data.toString());
       this.users = data;
     });
 
