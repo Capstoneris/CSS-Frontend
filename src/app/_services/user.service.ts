@@ -7,8 +7,9 @@ import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
+
   // TODO: is this used anywhere????
-  users: User[];
+  // users: User[];
 
   constructor(private http: HttpClient) {
   }
@@ -17,7 +18,7 @@ export class UserService {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
 
-  public getGroupsForUser() : Observable<Group[]> {
-    return this.http.get<Group[]>(`${environment.apiUrl}/users/in-my-groups`);
+  public getAllGroups() : Observable<Group[]> {
+    return this.http.get<Group[]>(`${environment.apiUrl}/groups`);
   }
 }

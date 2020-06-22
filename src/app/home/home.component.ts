@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
       this.users = data;
     });
 
-    this.userService.getGroupsForUser().subscribe((data)=>{
+    this.userService.getAllGroups().subscribe((data)=>{
       this.groupChoices = data;
     });
   }
@@ -54,6 +54,7 @@ export class HomeComponent implements OnInit {
       return [];
     }
     // TODO: Filter by group membership
+    
     return this.users.filter(u => true);
   }
 }
