@@ -15,7 +15,7 @@ export class UserService {
   }
 
   public getAllUsers() : Observable<User[]> {
-    return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    return this.http.get<User[]>(`${environment.usersUrl}/in-my-groups`);
   }
 
   public getAllGroups() : Observable<Group[]> {
