@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Group, InputfieldState, Invitation, Session, User} from '@app/_models';
+import {ChatMessage, Group, InputfieldState, Invitation, Session, User} from '@app/_models';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
@@ -20,6 +20,10 @@ export class WebsocketService {
 
   private sessionMembersSubject: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   public readonly sessionMembers: Observable<User[]> = this.sessionMembersSubject.asObservable();
+
+  private sessionChatMessagesSubject: BehaviorSubject<ChatMessage[]> = new BehaviorSubject<ChatMessage[]>([]);
+  public readonly sessionChatMessages: Observable<ChatMessage[]> = this.sessionChatMessagesSubject.asObservable();
+
 
   constructor(private snackBar: MatSnackBar, private router: Router) {
   }
@@ -51,16 +55,21 @@ export class WebsocketService {
     });
     this.socket.on('session-joined', (data: any) => {
       this.currentSessionSubject.next({isOwn: false, host: data.host});
+      this.sessionChatMessagesSubject.next(data.chatHistory);
       this.router.navigate(['/example-form']);
     });
     this.socket.on('session-left', () => {
       this.router.navigate(['/']);
       this.currentSessionSubject.next(null);
       this.sessionMembersSubject.next([]);
+      this.sessionChatMessagesSubject.next([]);
     });
     this.socket.on('member-list-update', (data: any) => {
       const members: User[] = data.users;
       this.sessionMembersSubject.next(members);
+    });
+    this.socket.on('chat-message', (data: any) => {
+      this.sessionChatMessagesSubject.next(this.sessionChatMessagesSubject.getValue().concat([data.message]));
     });
   }
 
@@ -109,6 +118,16 @@ export class WebsocketService {
       newValue: changed ? newValue : '',
       selectionStart,
       selectionEnd
+    });
+  }
+
+  sendChatMessage(sentBy: User, message: string) {
+    this.socket.emit('send-chat-message', {
+      message: {
+        sentBy,
+        message,
+        timestamp: Date.now()
+      }
     });
   }
 
