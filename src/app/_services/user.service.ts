@@ -8,14 +8,11 @@ import {Observable} from 'rxjs';
 @Injectable({providedIn: 'root'})
 export class UserService {
 
-  // TODO: is this used anywhere????
-  // users: User[];
-
   constructor(private http: HttpClient) {
   }
 
   public getAllUsers() : Observable<User[]> {
-    return this.http.get<User[]>(`${environment.usersUrl}/in-my-groups`);
+    return this.http.get<User[]>(`${environment.apiUrl}/users/in-my-groups`);
   }
 
   public getAllGroups() : Observable<Group[]> {

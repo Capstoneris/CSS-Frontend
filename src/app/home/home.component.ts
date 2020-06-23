@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
     if (!selectedGroupId) {
       return [];
     }
-    // TODO: Bug in the backend? the groups for users dont arrive as response of GET
-    return this.users.filter(u => u.groups.includes[Number(selectedGroupId.id)]);
+
+    return this.users.filter(u => u.groups.includes(selectedGroupId.id.toString()))
   }
 }
