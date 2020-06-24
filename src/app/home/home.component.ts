@@ -8,9 +8,7 @@ import {Group, User} from '@app/_models';
 @Component({templateUrl: 'home.component.html'})
 export class HomeComponent implements OnInit {
   startSessionForm: FormGroup;
-
   users: User[] = [];
-
   groupChoices: Group[] = [];
 
   constructor(private userService: UserService,
@@ -27,7 +25,7 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    this.userService.getAllUsers().subscribe((data)=>{
+    this.userService.getAllUsersInMyGroups().subscribe((data)=>{
       this.users = data;
     });
 
