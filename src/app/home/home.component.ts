@@ -52,6 +52,7 @@ export class HomeComponent implements OnInit {
       return [];
     }
 
+    // Filtering users list by users who are in the selected group
     return this.users.filter(u => u.groups.includes(selectedGroupId.id.toString()));
   }
 }
