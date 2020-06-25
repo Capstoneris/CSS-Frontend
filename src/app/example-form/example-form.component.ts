@@ -207,7 +207,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       element = field.nativeElement;
       fieldId = element.getAttribute('formControlName');
       element.addEventListener('mouseup', e => {
-        this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, element.selectionStart, element.selectionEnd);
+        this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, element['selectionStart'], element['selectionEnd']);
       });
     } else if (field instanceof MatRadioButton) {
       return; // Not needed yet
