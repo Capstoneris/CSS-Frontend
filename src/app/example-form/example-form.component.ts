@@ -208,7 +208,9 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       element = field.nativeElement;
       fieldId = element.getAttribute('formControlName');
       element.addEventListener('mouseup', e => {
+        /* tslint:disable:no-string-literal */
         this.websocketService.sendInputfieldInteraction(fieldId, false, null, null, element['selectionStart'], element['selectionEnd']);
+        /* tslint:enable:no-string-literal */
       });
     } else if (field instanceof MatRadioButton) {
       return; // Not needed yet
@@ -266,7 +268,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
 
 
     if (this.fieldTypingIndicators.has(fieldId) && this.fieldTypingIndicators.get(fieldId).typingUser.username !== ownUserName)
-      hint += ` ${this.fieldTypingIndicators.get(fieldId).typingUser.username} is typing...`
+      hint += ` ${this.fieldTypingIndicators.get(fieldId).typingUser.username} is typing...`;
 
     return hint;
   }
