@@ -1,5 +1,5 @@
-﻿import {RatingQuestion} from "@app/_models/rating-question";
+﻿import {RatingQuestion} from './rating-question';
 
 export class Survey {
-  questions: RatingQuestion[]
+  questions: RatingQuestion[];
 }

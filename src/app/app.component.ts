@@ -3,9 +3,9 @@ import {Router} from '@angular/router';
 
 import {AuthenticationService} from './_services';
 import {WebsocketService} from '@app/_services/websocket.service';
-import {Survey} from "@app/_models";
-import {MatDialog} from "@angular/material/dialog";
-import {SurveyDialogComponent} from "@app/survey-dialog/survey-dialog.component";
+import {Survey} from '@app/_models';
+import {MatDialog} from '@angular/material/dialog';
+import {SurveyDialogComponent} from '@app/survey-dialog/survey-dialog.component';
 
 @Component({selector: 'app-root', templateUrl: 'app.component.html'})
 export class AppComponent implements OnInit {

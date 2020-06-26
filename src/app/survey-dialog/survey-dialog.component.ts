@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Survey} from "@app/_models";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Survey} from '@app/_models';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-survey-dialog',
@@ -47,13 +47,13 @@ export class SurveyDialogComponent implements OnInit {
         rating: value.ratingQuestions[index]
       })),
       feedback: value.additionalFeedback
-    })
+    });
   }
 
   onNoClick() {
     this.dialogRef.close({
       answers: [],
       feedback: null
-    })
+    });
   }
 }
