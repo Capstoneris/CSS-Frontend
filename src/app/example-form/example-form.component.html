@@ -33,7 +33,7 @@
                         [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteCar') ? getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser) : 'transparent',
                         'box-shadow': fieldTypingIndicators.has('favouriteCar') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser)) : 'none'}"
                         #synchronizedField>
-              <mat-option>None</mat-option>
+              <mat-option [value]="null">None</mat-option>
               <mat-option *ngFor="let car of carChoices" [value]="car.value">
                 {{car.viewValue}}
               </mat-option>

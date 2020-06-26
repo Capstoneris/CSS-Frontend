@@ -68,7 +68,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     this.exampleForm = this.formBuilder.group({
       favouriteCity: '',
       favouriteFruit: '',
-      favouriteCar: '',
+      favouriteCar: null,
       imFeelingHappy: false,
       happiness: 50
     });
@@ -257,6 +257,8 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     const ownUserName = this.authenticationService.currentUserValue.username;
 
     const usernames = selections.map(s => s.user.username).filter(u => ownUserName !== u);
+    if (!usernames.length)
+      return null;
 
     let hint = 'Selected by ';
     if (usernames.length === 1) {
