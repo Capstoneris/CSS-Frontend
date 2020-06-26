@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Feedback Survey</h1>
+<div mat-dialog-content>
+  <form [formGroup]="surveyForm">
+    <div formArrayName="ratingQuestions">
+      <div *ngFor="let question of data.questions; index as qi" style="margin-bottom: 2em;">
+        <p>{{question.question}}</p>
+        <!-- Based on https://stackblitz.com/edit/angular-material-star-rating-i2f93q -->
+        <button mat-icon-button color="primary" *ngFor="let ratingId of [0,1,2,3,4];" [id]="'star_'+ratingId"
+                (click)="setRating(qi,ratingId+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+          <mat-icon>
+            {{getIcon(qi, ratingId)}}
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <mat-form-field style="display: block">
+      <textarea matInput placeholder="Additional Feedback" formControlName="additionalFeedback"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="onSubmitClick()">Submit</button>
+</div>
+

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ChatMessage, Group, InputfieldState, Invitation, Session, User} from '@app/_models';
+import {ChatMessage, Group, InputfieldState, Invitation, Session, Survey, User} from '@app/_models';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
@@ -131,9 +131,21 @@ export class WebsocketService {
     });
   }
 
+  sendRatingAnswers(data: any) {
+    this.socket.emit('rating-answers', {
+      message: data
+    });
+  }
+
   listenForInputfieldChanges() {
     return new Observable<{ user: User, state: InputfieldState }>(subscriber => {
       this.socket.on('inputfield-changed', data => subscriber.next(data));
+    });
+  }
+
+  listenForSurvey() {
+    return new Observable<Survey>(subscriber => {
+      this.socket.on('rating-questions', data => subscriber.next(data));
     });
   }
 }

@@ -35,6 +35,9 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
+import {MatDialogModule} from "@angular/material/dialog";;
+import { SurveyDialogComponent } from './survey-dialog/survey-dialog.component'
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   imports: [
@@ -64,7 +67,9 @@ import {PickerModule} from '@ctrl/ngx-emoji-mart';
     MatBadgeModule,
     MatGridListModule,
     FlexLayoutModule,
-    PickerModule
+    PickerModule,
+    MatDialogModule,
+    MatTooltipModule
   ],
   declarations: [
     AppComponent,
@@ -72,7 +77,8 @@ import {PickerModule} from '@ctrl/ngx-emoji-mart';
     LoginComponent,
     ExampleFormComponent,
     InvitationListComponent
-  ],
+,
+    SurveyDialogComponent  ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
