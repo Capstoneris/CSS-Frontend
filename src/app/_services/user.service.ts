@@ -17,4 +17,8 @@ export class UserService {
   public getAllGroups() : Observable<Group[]> {
     return this.http.get<Group[]>(`${environment.apiUrl}/groups`);
   }
+
+  public getMyGroups() : Observable<Group[]> {
+    return this.http.get<Group[]>(`${environment.apiUrl}/groups/my-groups`);
+  }
 }

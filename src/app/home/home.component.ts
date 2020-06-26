@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit} from '@angular/core';
-import {UserService} from '@app/_services';
+import {AuthenticationService, UserService} from '@app/_services';
 import {WebsocketService} from '@app/_services/websocket.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private userService: UserService,
               private websocketService: WebsocketService,
+              private authenticationService: AuthenticationService,
               private route: ActivatedRoute,
               private router: Router,
               private formBuilder: FormBuilder) {
@@ -25,11 +26,11 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    this.userService.getAllUsersInMyGroups().subscribe((data)=>{
+    this.userService.getAllUsersInMyGroups().subscribe((data) => {
       this.users = data;
     });
 
-    this.userService.getAllGroups().subscribe((data)=>{
+    this.userService.getMyGroups().subscribe((data) => {
       this.groupChoices = data;
     });
   }
@@ -53,6 +54,6 @@ export class HomeComponent implements OnInit {
     }
 
     // Filtering users list by users who are in the selected group
-    return this.users.filter(u => u.groups.includes(selectedGroupId.id.toString()));
+    return this.users.filter(u => u.username !== this.authenticationService.currentUserValue.username && u.groups.includes(selectedGroupId.id.toString()));
   }
 }

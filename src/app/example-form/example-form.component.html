@@ -62,7 +62,7 @@
   <div fxFlex="30%">
     <mat-card class="mat-elevation-z3" style="margin-left: 0.5em;">
       <mat-card-header>
-        <mat-card-title>Session Members</mat-card-title>
+        <mat-card-title>{{(websocketService.currentSession | async) ? 'Session Members' : 'Need Support?'}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-list *ngIf="(websocketService.currentSession | async); else startSession" style="padding: 0;">
@@ -91,7 +91,7 @@
           </mat-list-item>
         </mat-list>
         <ng-template #startSession>
-          START SESSION GOES HERE
+          <p>Please go to the home page to start a new support session.</p>
         </ng-template>
       </mat-card-content>
     </mat-card>
