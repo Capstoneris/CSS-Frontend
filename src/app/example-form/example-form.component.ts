@@ -246,9 +246,27 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
   getFormFieldHint(fieldId: string) {
     if (!this.fieldSelections.has(fieldId))
       return null;
+
     const selections = this.fieldSelections.get(fieldId);
     if (!selections || !selections.length)
       return null;
-    return selections.map(s => s.user.username).join(', ');
+
+    const ownUserName = this.authenticationService.currentUserValue.username;
+
+    const usernames = selections.map(s => s.user.username).filter(u => ownUserName !== u);
+
+    let hint = 'Selected by ';
+    if (usernames.length === 1) {
+      hint += usernames[0];
+    } else {
+      hint += `${usernames.slice(0, -1).join(', ')} and ${usernames[usernames.length - 1]}`;
+    }
+    hint += '.';
+
+
+    if (this.fieldTypingIndicators.has(fieldId) && this.fieldTypingIndicators.get(fieldId).typingUser.username !== ownUserName)
+      hint += ` ${this.fieldTypingIndicators.get(fieldId).typingUser.username} is typing...`
+
+    return hint;
   }
 }

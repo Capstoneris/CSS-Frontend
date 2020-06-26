@@ -28,7 +28,7 @@
           </mat-radio-group>
 
           <p>What's your favourite car?</p>
-          <mat-form-field>
+          <mat-form-field [hintLabel]="getFormFieldHint('favouriteCar')">
             <mat-select placeholder="Car brand" formControlName="favouriteCar" class="with-typing-indicator"
                         [ngStyle]="{'background-color': fieldTypingIndicators.has('favouriteCar') ? getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser) : 'transparent',
                         'box-shadow': fieldTypingIndicators.has('favouriteCar') ? ('0 0 7px 8px ' + getColorForUser(fieldTypingIndicators.get('favouriteCar').typingUser)) : 'none'}"
