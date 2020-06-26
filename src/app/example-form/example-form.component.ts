@@ -143,7 +143,7 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     this.fieldSelections.set(fieldId, state.selections);
 
     // Analyze field value type
-    const fieldType = typeof this.exampleForm.value[fieldId];
+    const fieldType = this.exampleForm.value[fieldId] ? typeof this.exampleForm.value[fieldId] : 'string';
 
     // Convert value if necessary
     let value: any = state.value;
@@ -174,7 +174,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
       }, TYPING_INDICATOR_RESET_TIMEOUT)
     };
     this.fieldTypingIndicators.set(fieldId, fieldTypingIndicator);
-
 
     // Apply new field state
     this.exampleForm.patchValue({

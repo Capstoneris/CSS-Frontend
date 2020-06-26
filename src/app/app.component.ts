@@ -24,10 +24,7 @@ export class AppComponent implements OnInit {
       this.loading = false;
     });
 
-    // Sorry for the ugly hack, need to find a better way to wait for the socket being connected.
-    window.setTimeout(() => {
-      this.websocketService.listenForSurvey().subscribe(survey => this.showSurvey(survey));
-    }, 2000);
+    this.websocketService.listenForSurvey().subscribe(survey => this.showSurvey(survey));
   }
 
   logout() {

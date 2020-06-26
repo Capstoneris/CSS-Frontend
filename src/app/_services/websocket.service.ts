@@ -3,7 +3,7 @@ import * as io from 'socket.io-client';
 import {environment} from '@environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ChatMessage, Group, InputfieldState, Invitation, Session, Survey, User} from '@app/_models';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subscriber} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Injectable({
@@ -24,6 +24,7 @@ export class WebsocketService {
   private sessionChatMessagesSubject: BehaviorSubject<ChatMessage[]> = new BehaviorSubject<ChatMessage[]>([]);
   public readonly sessionChatMessages: Observable<ChatMessage[]> = this.sessionChatMessagesSubject.asObservable();
 
+  private surveySubscriber: Subscriber<Survey>;
 
   constructor(private snackBar: MatSnackBar, private router: Router) {
   }
@@ -71,6 +72,7 @@ export class WebsocketService {
     this.socket.on('chat-message', (data: any) => {
       this.sessionChatMessagesSubject.next(this.sessionChatMessagesSubject.getValue().concat([data.message]));
     });
+    this.socket.on('rating-questions', data => this.surveySubscriber.next(data));
   }
 
   closeSocketConnection() {
@@ -144,8 +146,7 @@ export class WebsocketService {
   }
 
   listenForSurvey() {
-    return new Observable<Survey>(subscriber => {
-      this.socket.on('rating-questions', data => subscriber.next(data));
-    });
+    // Remember the survey subscriber because the socket might not have been established yet.
+    return new Observable<Survey>(subscriber => this.surveySubscriber = subscriber);
   }
 }
