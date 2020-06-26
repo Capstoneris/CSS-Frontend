@@ -142,19 +142,6 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     // Set field selection
     this.fieldSelections.set(fieldId, state.selections);
 
-    // Clear previous typing indicator
-    if (this.fieldTypingIndicators.has(fieldId)) {
-      window.clearTimeout(this.fieldTypingIndicators.get(fieldId).resetTimeout);
-    }
-
-    // Set new typing indicator
-    const fieldTypingIndicator = {
-      typingUser: byUser, resetTimeout: window.setTimeout(() => {
-        this.fieldTypingIndicators.delete(fieldId);
-      }, TYPING_INDICATOR_RESET_TIMEOUT)
-    };
-    this.fieldTypingIndicators.set(fieldId, fieldTypingIndicator);
-
     // Analyze field value type
     const fieldType = typeof this.exampleForm.value[fieldId];
 
@@ -174,6 +161,20 @@ export class ExampleFormComponent implements OnInit, AfterViewInit {
     if (this.exampleForm.controls[fieldId].value === value) {
       return;
     }
+
+    // Clear previous typing indicator
+    if (this.fieldTypingIndicators.has(fieldId)) {
+      window.clearTimeout(this.fieldTypingIndicators.get(fieldId).resetTimeout);
+    }
+
+    // Set new typing indicator
+    const fieldTypingIndicator = {
+      typingUser: byUser, resetTimeout: window.setTimeout(() => {
+        this.fieldTypingIndicators.delete(fieldId);
+      }, TYPING_INDICATOR_RESET_TIMEOUT)
+    };
+    this.fieldTypingIndicators.set(fieldId, fieldTypingIndicator);
+
 
     // Apply new field state
     this.exampleForm.patchValue({
