@@ -8,18 +8,8 @@ import {Group, User} from '@app/_models';
 @Component({templateUrl: 'home.component.html'})
 export class HomeComponent implements OnInit {
   startSessionForm: FormGroup;
-
-  users: User[] = [
-    {id: 1, username: 'Herbert'},
-    {id: 2, username: 'Simon'},
-    {id: 3, username: 'Hubertus'},
-    {id: 4, username: 'Amir'}
-  ];
-
-  groupChoices: Group[] = [
-    {id: 1, title: 'Admins'},
-    {id: 2, title: 'Walmart'}
-  ];
+  users: User[] = [];
+  groupChoices: Group[] = [];
 
   constructor(private userService: UserService,
               private websocketService: WebsocketService,
@@ -35,11 +25,13 @@ export class HomeComponent implements OnInit {
       users: [null, Validators.required]
     });
 
-    // this.loading = true;
-    // this.userService.getAll().pipe(first()).subscribe(users => {
-    //   this.loading = false;
-    //   this.users = users;
-    // });
+    this.userService.getAllUsersInMyGroups().subscribe((data)=>{
+      this.users = data;
+    });
+
+    this.userService.getAllGroups().subscribe((data)=>{
+      this.groupChoices = data;
+    });
   }
 
   startSession() {
@@ -59,7 +51,8 @@ export class HomeComponent implements OnInit {
     if (!selectedGroupId) {
       return [];
     }
-    // TODO: Filter by group membership
-    return this.users.filter(u => true);
+
+    // Filtering users list by users who are in the selected group
+    return this.users.filter(u => u.groups.includes(selectedGroupId.id.toString()));
   }
 }
